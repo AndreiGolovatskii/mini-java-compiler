@@ -70,7 +70,6 @@
     SEMICOLON ";"
 
     PRINT "System.out.println"
-    MAIN "main"
     IF "if"
     ELSE "else"
     WHILE "while"
@@ -95,8 +94,7 @@
 %token <std::string> IDENTIFIER "identifier"
 %token <int> INTEGRAL_LITERAL "integral_literal"
 
-
-%nterm <TClassDeclarationPtr> main_class
+%nterm <bool> static_opt
 
 %nterm <TClassDeclarationList> class_declaration_list
 %nterm <TClassDeclarationPtr> class_declaration
@@ -134,21 +132,9 @@
 %start program;
 
 program:
-    main_class class_declaration_list {
-        driver.Program_ = std::make_unique<TProgram>(std::move($1), std::move($2));
+    class_declaration_list {
+        driver.Program_ = std::make_unique<TProgram>(std::move($1));
     }
-
-
-main_class:
-    "class" IDENTIFIER "{" PUBLIC STATIC "void" "main" "(" ")" "{" statement_list "}" "}" {
-        $$ = std::make_unique<TClassDeclaration>(std::move($2));
-        TMethodDeclarationPtr main = std::make_unique<TMethodDeclaration>(std::make_unique<TVoidType>(),
-                                                                          TMethodSignature{"main", TVariableList{}},
-                                                                          std::move($11));
-        main->MakeStatic();
-        $$->AddMethod(std::move(main));
-    }
-
 
 statement_list:
     %empty {
@@ -164,9 +150,9 @@ class_declaration_list:
     %empty {
         $$ = TClassDeclarationList();
     }
-    | class_declaration class_declaration_list {
-        $$ = std::move($2);
-        $$.emplace_back(std::move($1));
+    | class_declaration_list class_declaration {
+        $$ = std::move($1);
+        $$.emplace_back(std::move($2));
     }
 
 
@@ -190,9 +176,9 @@ declaration_list:
     %empty {
         $$ = std::make_unique<TClassMemberDeclarationList>();
     }
-    | declaration declaration_list {
-        $$ = std::move($2);
-        $$->emplace_back(std::move($1));
+    | declaration_list declaration {
+        $$ = std::move($1);
+        $$->emplace_back(std::move($2));
     }
 
 
@@ -204,12 +190,18 @@ declaration:
         $$ = std::move($1);
     }
 
+
 method_declaration:
-    "public" type IDENTIFIER "(" formals ")" "{" statement_list "}" {
-        $$ = std::make_unique<TMethodDeclaration>(std::move($2),
-                                                  TMethodSignature(std::move($3), std::move($5)),
-                                                  std::move($8));
+    "public" static_opt type IDENTIFIER "(" formals ")" "{" statement_list "}" {
+        $$ = std::make_unique<TMethodDeclaration>(std::move($3),
+                                                  TMethodSignature(std::move($4), std::move($6)),
+                                                  std::move($9));
     }
+
+
+static_opt:
+    %empty {$$ = false;}
+    | "static" {$$ = true;}
 
 
 variable_declaration:

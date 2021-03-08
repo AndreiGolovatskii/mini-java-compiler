@@ -7,11 +7,9 @@
 
 class TProgram {
 public:
-    TProgram(TClassDeclarationPtr&& mainClass, TClassDeclarationList&& classDeclarations)
-        : MainClass_(std::move(mainClass)), ClassDeclarations_(std::move(classDeclarations)) {}
+    explicit TProgram(TClassDeclarationList&& classDeclarations) : ClassDeclarations_(std::move(classDeclarations)) {}
 
 private:
-    TClassDeclarationPtr MainClass_;
     TClassDeclarationList ClassDeclarations_;
 };
 

@@ -77,7 +77,6 @@ blank [ \t\r]
 "assert"   return yy::parser::make_ASSERT(loc);
 "new"      return yy::parser::make_NEW(loc);
 
-"main"     return yy::parser::make_MAIN(loc);
 "class"    return yy::parser::make_CLASS(loc);
 "public"   return yy::parser::make_PUBLIC(loc);
 "static"   return yy::parser::make_STATIC(loc);
