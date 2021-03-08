@@ -11,16 +11,7 @@
     class Scanner;
     class TDriver;
 
-    #include "class_declaration.hh"
-    #include "declaration.hh"
-    #include "expression.hh"
-    #include "invocation.hh"
-    #include "lvalue.hh"
-    #include "method_declaration.hh"
-    #include "program.hh"
-    #include "statement.hh"
-    #include "type.hh"
-    #include "variable_declaration.hh"
+    #include "ast_components.hh"
 }
 
 %define parse.trace
@@ -116,7 +107,7 @@
 %nterm <TExpressionPtr> expr
 
 %nterm <TDeclarationListPtr> declaration_list
-%nterm <TDeclarationPtr> declaration
+%nterm <TClassMemberDeclarationPtr> declaration
 %nterm <TVariableDeclarationPtr> variable_declaration
 %nterm <TMethodDeclarationPtr> method_declaration
 
@@ -197,7 +188,7 @@ extends:
 
 declaration_list:
     %empty {
-        $$ = std::make_unique<TDeclarationList>();
+        $$ = std::make_unique<TClassMemberDeclarationList>();
     }
     | declaration declaration_list {
         $$ = std::move($2);

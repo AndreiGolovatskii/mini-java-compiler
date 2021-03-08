@@ -1,12 +1,12 @@
-#ifndef COMPILER_STATEMENT_HH
-#define COMPILER_STATEMENT_HH
+#ifndef COMPILER_STATEMENTS_HH
+#define COMPILER_STATEMENTS_HH
 
 #include <memory>
 
-#include "expression.hh"
+#include "declarations/variable_declaration.hh"
+#include "expressions/expression_base.hh"
 #include "invocation.hh"
 #include "lvalue.hh"
-#include "variable_declaration.hh"
 
 class TStatement {
 public:
@@ -136,4 +136,4 @@ private:
 using TMethodInvocationStatementPtr = std::unique_ptr<TMethodInvocationStatement>;
 
 
-#endif//COMPILER_STATEMENT_HH
+#endif//COMPILER_STATEMENTS_HH

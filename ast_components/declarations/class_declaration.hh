@@ -25,7 +25,7 @@ public:
 private:
     std::string ClassName_;
     std::string Extends_;
-    TDeclarationList Members_;
+    TClassMemberDeclarationList Members_;
 };
 
 

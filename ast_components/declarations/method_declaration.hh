@@ -3,8 +3,8 @@
 
 #include <string>
 
-#include "declaration.hh"
-#include "statement.hh"
+#include "class_member_declaration.hh"
+#include "statements/statements.hh"
 
 
 class TMethodSignature {
@@ -18,7 +18,7 @@ private:
 };
 
 
-class TMethodDeclaration : public TDeclaration {
+class TMethodDeclaration : public TClassMemberDeclaration {
 public:
     explicit TMethodDeclaration(TTypePtr&& returnType, TMethodSignature&& signature, TStatementListPtr&& statements)
         : ReturnType_(std::move(returnType)), Signature_(std::move(signature)), Statements_(std::move(statements)) {}

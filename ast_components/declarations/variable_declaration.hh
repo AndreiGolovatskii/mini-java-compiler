@@ -4,10 +4,11 @@
 #include <memory>
 #include <string>
 
-#include "declaration.hh"
+#include "declarations/class_member_declaration.hh"
+#include "declarations/variable.hh"
 
 
-class TVariableDeclaration : public TDeclaration {
+class TVariableDeclaration : public TClassMemberDeclaration {
 public:
     explicit TVariableDeclaration(TVariable&& variable) : Variable_(std::move(variable)) {}
 

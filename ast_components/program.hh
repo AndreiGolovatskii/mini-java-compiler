@@ -1,7 +1,7 @@
 #ifndef COMPILER_PROGRAM_HH
 #define COMPILER_PROGRAM_HH
 
-#include "class_declaration.hh"
+#include "declarations/class_declaration.hh"
 #include <memory>
 #include <vector>
 

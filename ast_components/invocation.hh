@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 
-#include "expression_base.hh"
+#include "expressions/expression_base.hh"
 
 class TMethodInvocation {
 public:

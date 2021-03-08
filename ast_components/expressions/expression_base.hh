@@ -2,6 +2,7 @@
 #define COMPILER_EXPRESSION_BASE_HH
 
 #include <memory>
+#include <vector>
 
 class TExpression {
 public:
