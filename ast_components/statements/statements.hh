@@ -62,7 +62,7 @@ using TIfStatementPtr = std::unique_ptr<TIfStatement>;
 class TIfElseStatement : public TIfStatement {
 public:
     explicit TIfElseStatement(TExpressionPtr&& condition, TStatementPtr&& statement, TStatementPtr&& elseStatement)
-        : TIfStatement(std::move(condition), std::move(elseStatement)), ElseStatement_(std::move(elseStatement)) {}
+        : TIfStatement(std::move(condition), std::move(statement)), ElseStatement_(std::move(elseStatement)) {}
 
 private:
     TStatementPtr ElseStatement_;

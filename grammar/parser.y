@@ -8,7 +8,7 @@
 
 %code requires {
     #include <string>
-    class Scanner;
+    class TScanner;
     class TDriver;
 
     #include "ast_components.hh"
@@ -21,14 +21,14 @@
     #include "driver.hh"
     #include "location.hh"
 
-    static yy::parser::symbol_type yylex(Scanner &scanner, TDriver& driver) {
+    static yy::parser::symbol_type yylex(TScanner &scanner, TDriver& driver) {
         return scanner.ScanToken();
     }
 }
 
-%lex-param { Scanner &scanner }
+%lex-param { TScanner &scanner }
 %lex-param { TDriver &driver }
-%parse-param { Scanner &scanner }
+%parse-param { TScanner &scanner }
 %parse-param { TDriver &driver }
 
 %locations

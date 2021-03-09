@@ -89,6 +89,10 @@ class TIntExpression : public TExpression {
 public:
     explicit TIntExpression(int value) : Value_(value) {}
 
+    int GetValue() const {
+        return Value_;
+    }
+
 private:
     const int Value_;
 };
@@ -106,6 +110,10 @@ using TThisExpressionPtr = std::unique_ptr<TThisExpression>;
 class TBooleanExpression : public TExpression {
 public:
     explicit TBooleanExpression(bool value) : Value_(value) {}
+
+    bool GetValue() const {
+        return Value_;
+    }
 
 private:
     const bool Value_;

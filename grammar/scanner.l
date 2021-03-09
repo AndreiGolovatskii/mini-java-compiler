@@ -12,7 +12,7 @@
 %option noyywrap nounput noinput batch debug
 
 %option c++
-%option yyclass="Scanner"
+%option yyclass="TScanner"
 
 %{
   // A number symbol corresponding to the value in S.

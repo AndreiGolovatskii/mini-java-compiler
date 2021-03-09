@@ -2,7 +2,10 @@ cmake_minimum_required(VERSION 3.0)
 
 project(compiler)
 
+set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,readability-*,-warnings-as-errors=*,readability-as-errors=*)
+
 set(CMAKE_CXX_STANDARD 20)
+set(COMPILE_FLAGS -Wall -Wextra -pedantic -Werror)
 
 include_directories(driver grammar ast_components)
 
