@@ -30,7 +30,6 @@ add_library(
         ${FLEX_MyScanner_OUTPUTS}
 )
 
-# NOTE: Resetting a global CMAKE_CXX_CLANG_TIDY and COMPILE_OPTIONS
 set_target_properties(
         LibGrammar
         PROPERTIES

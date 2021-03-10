@@ -106,7 +106,7 @@
 
 %nterm <TDeclarationListPtr> declaration_list
 %nterm <TClassMemberDeclarationPtr> declaration
-%nterm <TVariableDeclarationPtr> variable_declaration
+%nterm <TMemberVariableDeclarationPtr> variable_declaration
 %nterm <TMethodDeclarationPtr> method_declaration
 
 %nterm <TVariableList> formals
@@ -193,9 +193,12 @@ declaration:
 
 method_declaration:
     "public" static_opt type IDENTIFIER "(" formals ")" "{" statement_list "}" {
-        $$ = std::make_unique<TMethodDeclaration>(std::move($3),
+        $$ = std::make_unique<TMemberMethodDeclaration>(std::move($3),
                                                   TMethodSignature(std::move($4), std::move($6)),
                                                   std::move($9));
+        if ($2) {
+            $$->MakeStatic();
+        }
     }
 
 
@@ -206,7 +209,7 @@ static_opt:
 
 variable_declaration:
     type IDENTIFIER ";" {
-        $$ = std::make_unique<TVariableDeclaration>(TVariable(std::move($1), std::move($2)));
+        $$ = std::make_unique<TMemberVariableDeclaration>(TVariable(std::move($1), std::move($2)));
     }
 
 
@@ -267,8 +270,8 @@ statement:
 
 
 local_variable_declaration:
-    variable_declaration {
-        $$ = std::make_unique<TVariableDeclarationStatement>(std::move($1));
+    type IDENTIFIER ";" {
+        $$ = std::make_unique<TVariableDeclarationStatement>(TVariable(std::move($1), std::move($2)));
     }
 
 

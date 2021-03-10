@@ -1,6 +1,8 @@
 #ifndef COMPILER_AST_COMPONENTS_HH
 #define COMPILER_AST_COMPONENTS_HH
 
+#include "ast_forward_declaration.hh"
+
 #include "invocation.hh"
 #include "lvalue.hh"
 #include "program.hh"

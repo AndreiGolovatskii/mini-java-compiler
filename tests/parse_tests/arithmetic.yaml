@@ -1,0 +1,163 @@
+Classes:
+  - kind: class
+    name: Arithmetic
+    members:
+      - kind: method
+        is-static: true
+        name: main
+        return-type:
+          kind: void type
+          is-array: false
+        statements:
+          - kind: assert statement
+            expresion:
+              kind: eq expression
+              lhs:
+                kind: sub expression
+                lhs:
+                  kind: int expression
+                  value: -1
+                rhs:
+                  kind: int expression
+                  value: -1
+              rhs:
+                kind: sub expression
+                lhs:
+                  kind: int expression
+                  value: -1
+                rhs:
+                  kind: int expression
+                  value: -1
+          - kind: assert statement
+            expresion:
+              kind: eq expression
+              lhs:
+                kind: sum expression
+                lhs:
+                  kind: int expression
+                  value: 2
+                rhs:
+                  kind: int expression
+                  value: 2
+              rhs:
+                kind: sum expression
+                lhs:
+                  kind: int expression
+                  value: 2
+                rhs:
+                  kind: int expression
+                  value: 2
+          - kind: assert statement
+            expresion:
+              kind: eq expression
+              lhs:
+                kind: sum expression
+                lhs:
+                  kind: int expression
+                  value: 2
+                rhs:
+                  kind: int expression
+                  value: 2
+              rhs:
+                kind: sum expression
+                lhs:
+                  kind: int expression
+                  value: 2
+                rhs:
+                  kind: int expression
+                  value: 2
+          - kind: assert statement
+            expresion:
+              kind: eq expression
+              lhs:
+                kind: sub expression
+                lhs:
+                  kind: int expression
+                  value: 2
+                rhs:
+                  kind: int expression
+                  value: 2
+              rhs:
+                kind: sub expression
+                lhs:
+                  kind: int expression
+                  value: 2
+                rhs:
+                  kind: int expression
+                  value: 2
+          - kind: assert statement
+            expresion:
+              kind: eq expression
+              lhs:
+                kind: sum expression
+                lhs:
+                  kind: int expression
+                  value: 2
+                rhs:
+                  kind: int expression
+                  value: 2
+              rhs:
+                kind: sum expression
+                lhs:
+                  kind: int expression
+                  value: 2
+                rhs:
+                  kind: int expression
+                  value: 2
+          - kind: assert statement
+            expresion:
+              kind: le expression
+              lhs:
+                kind: sum expression
+                lhs:
+                  kind: int expression
+                  value: 1
+                rhs:
+                  kind: int expression
+                  value: 1
+              rhs:
+                kind: sum expression
+                lhs:
+                  kind: int expression
+                  value: 1
+                rhs:
+                  kind: int expression
+                  value: 1
+          - kind: assert statement
+            expresion:
+              kind: and  expression
+              lhs:
+                kind: leq expression
+                lhs:
+                  kind: int expression
+                  value: 1
+                rhs:
+                  kind: int expression
+                  value: 1
+              rhs:
+                kind: leq expression
+                lhs:
+                  kind: int expression
+                  value: 1
+                rhs:
+                  kind: int expression
+                  value: 1
+          - kind: assert statement
+            expresion:
+              kind: or expression
+              lhs:
+                kind: ge expression
+                lhs:
+                  kind: int expression
+                  value: 1
+                rhs:
+                  kind: int expression
+                  value: 1
+              rhs:
+                kind: ge expression
+                lhs:
+                  kind: int expression
+                  value: 1
+                rhs:
+                  kind: int expression
+                  value: 1

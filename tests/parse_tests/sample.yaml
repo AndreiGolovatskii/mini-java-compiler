@@ -1,0 +1,76 @@
+Classes:
+  - kind: class
+    name: Factorial
+    members:
+      - kind: method
+        is-static: true
+        name: main
+        return-type:
+          kind: void type
+          is-array: false
+        statements:
+          - kind: print statement
+            expression:
+              kind: method invocation expression
+              invocation:
+                kind: method invocation
+                method: ComputeFac
+                expression:
+                  kind: new expression
+                  value-type:
+                    kind: identifier type
+                    identifier: Fac
+                    is-array: false
+                arguments:
+                  - kind: int expression
+                    value: 10
+  - kind: class
+    name: Fac
+    members:
+      - kind: method
+        is-static: false
+        name: ComputeFac
+        return-type:
+          kind: int type
+          is-array: false
+        arguments:
+          - name: num
+            type:
+              kind: int type
+              is-array: false
+        statements:
+          - kind: assert statement
+            expresion:
+              kind: ge expression
+              lhs:
+                kind: identifier expression
+                identifier: num
+              rhs:
+                kind: identifier expression
+                identifier: num
+          - kind: variable declaration statement
+            variable-type:
+              kind: int type
+              is-array: false
+            variable-name: num_aux
+          - kind: if statement
+            condition:
+              kind: eq expression
+              lhs:
+                kind: identifier expression
+                identifier: num
+              rhs:
+                kind: identifier expression
+                identifier: num
+            statement:
+              kind: assignment statement
+              expression:
+                kind: int expression
+                value: 1
+              lvalue:
+                kind: lvalue identifier
+                identifier: num_aux
+          - kind: return statement
+            statement:
+              kind: identifier expression
+              identifier: num_aux

@@ -4,6 +4,7 @@
 #include <string>
 
 #include "class_member_declaration.hh"
+#include "declarations/variable.hh"
 #include "statements/statements.hh"
 
 
@@ -12,28 +13,56 @@ public:
     explicit TMethodSignature(std::string&& name, TVariableList&& arguments)
         : Name_(std::move(name)), Arguments_(std::move(arguments)) {}
 
+    [[nodiscard]] const std::string& Name() const {
+        return Name_;
+    }
+
+    [[nodiscard]] const TVariableList& Arguments() const {
+        return Arguments_;
+    }
+
 private:
-    std::string Name_;
+    const std::string Name_;
     TVariableList Arguments_;
 };
 
 
-class TMethodDeclaration : public TClassMemberDeclaration {
+class TMemberMethodDeclaration : public TClassMemberDeclaration {
 public:
-    explicit TMethodDeclaration(TTypePtr&& returnType, TMethodSignature&& signature, TStatementListPtr&& statements)
+    explicit TMemberMethodDeclaration(TTypePtr&& returnType, TMethodSignature&& signature,
+                                      TStatementListPtr&& statements)
         : ReturnType_(std::move(returnType)), Signature_(std::move(signature)), Statements_(std::move(statements)) {}
 
     void MakeStatic() {
         Static_ = true;
     }
+    void Accept(IVisitor* visitor) override {
+        visitor->Visit(this);
+    }
+
+    [[nodiscard]] const TMethodSignature& Signature() const {
+        return Signature_;
+    }
+
+    [[nodiscard]] bool IsStatic() const {
+        return Static_;
+    }
+
+    [[nodiscard]] TType* ReturnType() const {
+        return ReturnType_.get();
+    }
+
+    [[nodiscard]] TStatementList* Statements() const {
+        return Statements_.get();
+    }
 
 private:
     bool Static_ = false;
-    TTypePtr ReturnType_;
-    TMethodSignature Signature_;
-    TStatementListPtr Statements_;
+    const TTypePtr ReturnType_;
+    const TMethodSignature Signature_;
+    const TStatementListPtr Statements_;
 };
 
-using TMethodDeclarationPtr = std::unique_ptr<TMethodDeclaration>;
+using TMethodDeclarationPtr = std::unique_ptr<TMemberMethodDeclaration>;
 
 #endif//COMPILER_METHOD_DECLARATION_HH

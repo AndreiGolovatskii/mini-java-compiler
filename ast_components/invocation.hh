@@ -5,13 +5,28 @@
 #include <string>
 
 #include "expressions/expression_base.hh"
+#include "i_node.hh"
 
-class TMethodInvocation {
+class TMethodInvocation : public INode {
 public:
     explicit TMethodInvocation(TExpressionPtr&& expression, std::string&& method, TExpressionListPtr&& arguments)
         : Expression_(std::move(expression)), Method_(std::move(method)), Arguments_(std::move(arguments)) {}
 
-    virtual ~TMethodInvocation() = default;
+    void Accept(IVisitor* visitor) override {
+        visitor->Visit(this);
+    }
+
+    [[nodiscard]] TExpression* Expression() const {
+        return Expression_.get();
+    }
+
+    [[nodiscard]] const std::string& Method() const {
+        return Method_;
+    }
+
+    [[nodiscard]] TExpressionList* Arguments() const {
+        return Arguments_.get();
+    }
 
 private:
     TExpressionPtr Expression_;
@@ -22,11 +37,16 @@ private:
 
 using TMethodInvocationPtr = std::unique_ptr<TMethodInvocation>;
 
-class TFieldInvocation {
+class TFieldInvocation : public INode {
 public:
     explicit TFieldInvocation(std::string&& identifier) : Identifier_(identifier) {}
+    void Accept(IVisitor* visitor) override {
+        visitor->Visit(this);
+    }
 
-    virtual ~TFieldInvocation() = default;
+    [[nodiscard]] const std::string& Identifier() const {
+        return Identifier_;
+    }
 
 private:
     std::string Identifier_;
@@ -40,6 +60,13 @@ class TFieldInvocationIndexed : public TFieldInvocation {
 public:
     explicit TFieldInvocationIndexed(std::string&& identifier, TExpressionPtr&& index)
         : TFieldInvocation(std::move(identifier)), Index_(std::move(index)) {}
+    void Accept(IVisitor* visitor) override {
+        visitor->Visit(this);
+    }
+
+    [[nodiscard]] TExpression* Index() const {
+        return Index_.get();
+    }
 
 private:
     TExpressionPtr Index_;

@@ -2,29 +2,34 @@ cmake_minimum_required(VERSION 3.0)
 
 project(compiler)
 
+
 set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,readability-*,-warnings-as-errors=*,readability-as-errors=*)
 
 set(CMAKE_CXX_STANDARD 20)
 set(COMPILE_FLAGS -Wall -Wextra -pedantic -Werror)
 
-include_directories(driver grammar ast_components)
+include_directories(driver grammar ast_components visitors)
+include_directories(
+        third-party/yaml-cpp/include
+)
 
 add_subdirectory(grammar)
 add_subdirectory(driver)
 add_subdirectory(ast_components)
+add_subdirectory(visitors)
+add_subdirectory(third-party/yaml-cpp)
 
 add_library(
         LibCompiler
         INTERFACE
 )
-target_link_libraries(LibCompiler INTERFACE LibDriver LibGrammar)
+target_link_libraries(LibCompiler INTERFACE LibDriver LibGrammar Visitors)
 
 add_executable(
         Compiler
         main.cpp
         ${HEADERS}
 )
-
 
 target_link_libraries(Compiler LibCompiler)
 
