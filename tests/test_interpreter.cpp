@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 
 #include <filesystem>
-#include <strstream>
 
 #include "driver.hh"
 #include "naive_interpreter.hh"
