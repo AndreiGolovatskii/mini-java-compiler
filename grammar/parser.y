@@ -119,8 +119,6 @@
 
 %nterm <TVariableDeclarationStatementPtr> local_variable_declaration
 
-%nterm <TLvaluePtr> lvalue
-
 %nterm <std::string> extends
 
 %nterm <TMethodInvocationPtr> method_invocation
@@ -256,6 +254,18 @@ type_identifier:
 %nonassoc NO_ELSE;
 %nonassoc "else";
 
+
+%right "||";
+%right "&&";
+%precedence "!";
+%left ">" "<" "<=" ">=" "==";
+%left "+" "-";
+%left "*" "/" "%";
+%left UMINUS;
+%nonassoc NO_BRACKET;
+%nonassoc "[";
+%nonassoc ".";
+
 statement:
     "assert" "(" expr ")" ";" {$$ = std::make_unique<TAssertionStatement>(std::move($3));}
     | local_variable_declaration {$$ = std::move($1);}
@@ -266,7 +276,7 @@ statement:
     }
     | "while"  "(" expr ")" statement {$$ = std::make_unique<TWhileStatement>(std::move($3), std::move($5));}
     | "System.out.println" "(" expr ")" ";" {$$ = std::make_unique<TPrintlnStatement>(std::move($3));}
-    | lvalue "=" expr ";"  {$$ = std::make_unique<TAssignmentStatement>(std::move($1), std::move($3));}
+    | expr "=" expr ";"  {$$ = std::make_unique<TAssignmentStatement>(std::move($1), std::move($3));}
     | "return" expr ";" {$$ = std::make_unique<TReturnStatement>(std::move($2));}
     | method_invocation ";" {$$ = std::make_unique<TMethodInvocationStatement>(std::move($1));}
 
@@ -304,34 +314,12 @@ expr_comma_separated_list_prefix:
 
 
 field_invocation:
-    "this" "." IDENTIFIER {
+    expr "." IDENTIFIER %prec NO_BRACKET {
         $$ = std::make_unique<TFieldInvocation>(std::move($3));
     }
-    | "this" "." IDENTIFIER "[" expr "]" {
+    | expr "." IDENTIFIER "[" expr "]" {
         $$ = std::make_unique<TFieldInvocationIndexed>(std::move($3), std::move($5));
     }
-
-
-lvalue:
-    IDENTIFIER {
-        $$ = std::make_unique<TLvalueIdentifier>(std::move($1));
-    }
-    | IDENTIFIER "[" expr "]" {
-        $$ = std::make_unique<TLvalueIdentifierIndexed>(std::move($1), std::move($3));
-    }
-    | field_invocation {
-        $$ = std::make_unique<TLvalueFieldInvocation>(std::move($1));
-    }
-
-%nonassoc "[";
-%nonassoc ".";
-%right "||";
-%right "&&";
-%precedence "!";
-%left ">" "<" "<=" ">=" "==";
-%left "+" "-";
-%left "*" "/" "%";
-
 
 
 expr:
@@ -349,6 +337,7 @@ expr:
     | expr "*" expr {$$ = std::make_unique<TMulExpression>(std::move($1), std::move($3));}
     | expr "/" expr {$$ = std::make_unique<TDivExpression>(std::move($1), std::move($3));}
     | expr "%" expr {$$ = std::make_unique<TModExpression>(std::move($1), std::move($3));}
+    | "-" expr %prec UMINUS {$$ = std::make_unique<TUnaryMinusExpression>(std::move($2));}
 
     | expr "[" expr "]"  {$$ = std::make_unique<TIndexExpression>(std::move($1), std::move($3));}
     | expr "."  "length" {$$ = std::make_unique<TLengthExpression>(std::move($1));}
@@ -358,7 +347,6 @@ expr:
     | "(" expr ")" {$$ = std::move($2);}
     | IDENTIFIER {$$ = std::make_unique<TIdentifierExpression>(std::move($1));}
     | INTEGRAL_LITERAL {$$ = std::make_unique<TIntExpression>($1);}
-    | "-" INTEGRAL_LITERAL {$$ = std::make_unique<TIntExpression>(-$2);}
     | "this" {$$ = std::make_unique<TThisExpression>();}
     | "true" {$$ = std::make_unique<TBooleanExpression>(true);}
     | "false" {$$ = std::make_unique<TBooleanExpression>(false);}

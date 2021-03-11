@@ -4,7 +4,6 @@
 #include "ast_forward_declaration.hh"
 
 #include "invocation.hh"
-#include "lvalue.hh"
 #include "program.hh"
 
 #include "declarations/declarations.hh"

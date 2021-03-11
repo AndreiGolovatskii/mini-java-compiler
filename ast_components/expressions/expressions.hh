@@ -8,6 +8,24 @@
 #include "expressions/expression_base.hh"
 #include "invocation.hh"
 
+class TUnaryMinusExpression : public TExpression {
+public:
+    explicit TUnaryMinusExpression(TExpressionPtr&& expression) : Expression_(std::move(expression)) {}
+
+    void Accept(IVisitor* visitor) override {
+        visitor->Visit(this);
+    }
+
+    [[nodiscard]] TExpression* Expression() const {
+        return Expression_.get();
+    }
+
+private:
+    TExpressionPtr Expression_;
+};
+
+using TUnaryMinusExpressionPtr = std::unique_ptr<TUnaryMinusExpression>;
+
 
 class TNotExpression : public TExpression {
 public:

@@ -29,14 +29,15 @@ public:
     }
     void Visit(struct TAssertionStatement* statement) override {
         statement->Expression()->Accept(this);
-        if (!ReturnValue_) {
+        if (!GetReturnValue_()) {
             throw std::runtime_error{"Assertion failed"};
         }
     }
     void Visit(struct TAssignmentStatement* statement) override {
-        statement->Lvalue()->Accept(this);
         statement->Expression()->Accept(this);
-        Assignment_();
+        int value = GetReturnValue_();
+        statement->Lvalue()->Accept(this);
+        std::get<lvalue>(ReturnValue_)->second = value;
     }
     void Visit(struct TBooleanExpression* expression) override {
         ReturnValue_ = expression->GetValue();
@@ -76,7 +77,7 @@ public:
         BinaryExpression(expression, std::greater_equal<>());
     }
     void Visit(struct TIdentifierExpression* expression) override {
-        ReturnValue_ = Variables_[expression->Identifier()];
+        ReturnValue_ = Variables_.find(expression->Identifier());
     }
 
     void Visit(struct TIndexExpression* expression) override {
@@ -132,27 +133,18 @@ public:
     void Visit(struct TReturnStatement* statement) override {
         throw TReturnException{};
     }
-    void Visit(struct TLvalueIdentifier* identifier) override {
-        Lvalue_ = identifier->Identifier();
-    }
-    void Visit(struct TLvalueFieldInvocation* invocation) override {
-        throw std::logic_error{"unsupported"};
-    }
     void Visit(struct TNotExpression* expression) override {
         expression->Expression()->Accept(this);
-        ReturnValue_ = !ReturnValue_;
+        ReturnValue_ = !GetReturnValue_();
     }
     void Visit(struct TPrintlnStatement* statement) override {
         statement->Expression()->Accept(this);
-        Out_ << ReturnValue_ << std::endl;
+        Out_ << GetReturnValue_() << std::endl;
     }
     void Visit(struct TMulExpression* expression) override {
         BinaryExpression(expression, std::multiplies<>());
     }
     void Visit(struct TLengthExpression* expression) override {
-        throw std::logic_error{"unsupported"};
-    }
-    void Visit(struct TLvalueIdentifierIndexed* indexed) override {
         throw std::logic_error{"unsupported"};
     }
     void Visit(struct TVariableDeclarationStatement* statement) override {
@@ -179,7 +171,7 @@ public:
     }
     void Visit(struct TIfElseStatement* statement) override {
         statement->Condition()->Accept(this);
-        if (ReturnValue_) {
+        if (GetReturnValue_()) {
             statement->Statement()->Accept(this);
         } else {
             statement->ElseStatement()->Accept(this);
@@ -187,40 +179,53 @@ public:
     }
     void Visit(struct TIfStatement* statement) override {
         statement->Condition()->Accept(this);
-        if (ReturnValue_) {
+        if (GetReturnValue_()) {
             statement->Statement()->Accept(this);
         }
     }
     void Visit(struct TWhileStatement* statement) override {
         statement->Condition()->Accept(this);
-        while (ReturnValue_) {
+        while (GetReturnValue_()) {
             statement->Statement()->Accept(this);
             statement->Condition()->Accept(this);
         }
     }
-
-    [[nodiscard]] int ExitCode() const {
-        return ReturnValue_;
+    void Visit(struct TUnaryMinusExpression* expression) override {
+        expression->Expression()->Accept(this);
+        ReturnValue_ = -GetReturnValue_();
     }
+
 
 private:
     struct TReturnException : public std::exception {};
 
-    int ReturnValue_;
-
-    std::string Lvalue_;
     std::unordered_map<std::string, int> Variables_;
-    std::ostream& Out_;
+    using lvalue = std::unordered_map<std::string, int>::iterator;
+    std::variant<int, lvalue> ReturnValue_;
 
-    void Assignment_() {
-        Variables_[Lvalue_] = ReturnValue_;
+
+    template<class... Ts>
+    struct overloaded : Ts... {
+        using Ts::operator()...;
+    };
+    template<class... Ts>
+    overloaded(Ts...) -> overloaded<Ts...>;
+
+    int GetReturnValue_() {
+        return std::visit(overloaded{
+                                  [](int value) { return value; },
+                                  [](lvalue& lvalue) { return lvalue->second; },
+                          },
+                          ReturnValue_);
     }
+
+    std::ostream& Out_;
 
     void BinaryExpression(TBinaryExpression* expression, const std::function<int(int, int)>& fun) {
         expression->Lhs()->Accept(this);
-        int r1 = ReturnValue_;
+        int r1 = GetReturnValue_();
         expression->Rhs()->Accept(this);
-        int r2       = ReturnValue_;
+        int r2       = GetReturnValue_();
         ReturnValue_ = fun(r1, r2);
     }
 };

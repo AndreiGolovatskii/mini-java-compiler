@@ -160,35 +160,6 @@ public:
     void Visit(struct TLeqExpression* expression) override {
         BinaryExpression_("leq", expression);
     }
-    void Visit(struct TLvalueFieldInvocation* lvalue) override {
-        YAML::Node result;
-        result["kind"] = "lvalue field invocation";
-
-        lvalue->Invocation()->Accept(this);
-        result["invocation"] = Return_;
-
-        Return_.reset();
-        Return_ = result;
-    }
-    void Visit(struct TLvalueIdentifier* lvalue) override {
-        YAML::Node result;
-        result["kind"]       = "lvalue identifier";
-        result["identifier"] = lvalue->Identifier();
-
-        Return_.reset();
-        Return_ = result;
-    }
-    void Visit(struct TLvalueIdentifierIndexed* indexed) override {
-        YAML::Node result;
-        result["kind"]       = "lvalue identifier indexed";
-        result["identifier"] = indexed->Identifier();
-
-        indexed->Index()->Accept(this);
-        result["index"] = Return_;
-
-        Return_.reset();
-        Return_ = result;
-    }
     void Visit(struct TMemberMethodDeclaration* declaration) override {
         YAML::Node result;
         result["kind"]      = "method";
@@ -197,13 +168,18 @@ public:
 
         declaration->ReturnType()->Accept(this);
         result["return-type"] = Return_;
-        for (const auto& argument : declaration->Signature().Arguments()) {
-            YAML::Node arg;
-            argument.Type()->Accept(this);
-            arg["name"] = argument.Name();
-            arg["type"] = Return_;
 
-            result["arguments"].push_back(arg);
+        if (declaration->Signature().Arguments().empty()) {
+            result["arguments"] = YAML::Null;
+        } else {
+            for (const auto& argument : declaration->Signature().Arguments()) {
+                YAML::Node arg;
+                argument.Type()->Accept(this);
+                arg["name"] = argument.Name();
+                arg["type"] = Return_;
+
+                result["arguments"].push_back(arg);
+            }
         }
 
         declaration->Statements()->Accept(this);
@@ -319,7 +295,7 @@ public:
         YAML::Node result;
         result["kind"] = "return statement";
         statements->Expression()->Accept(this);
-        result["statement"] = Return_;
+        result["expression"] = Return_;
 
         Return_.reset();
         Return_ = result;
@@ -387,6 +363,15 @@ public:
 
     void Print(std::ostream& out) const {
         out << Root_;
+    }
+    void Visit(struct TUnaryMinusExpression* expression) override {
+        YAML::Node result;
+        result["kind"] = "unary minus expression";
+        expression->Expression()->Accept(this);
+        result["expression"] = Return_;
+
+        Return_.reset();
+        Return_ = result;
     }
 
 private:

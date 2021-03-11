@@ -8,6 +8,7 @@ Classes:
         return-type:
           kind: void type
           is-array: false
+        arguments: ~
         statements:
           - kind: assert statement
             expresion:

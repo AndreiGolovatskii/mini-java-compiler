@@ -27,9 +27,6 @@ public:
     virtual void Visit(class TLeExpression*)                 = 0;
     virtual void Visit(class TLengthExpression*)             = 0;
     virtual void Visit(class TLeqExpression*)                = 0;
-    virtual void Visit(class TLvalueFieldInvocation*)        = 0;
-    virtual void Visit(class TLvalueIdentifier*)             = 0;
-    virtual void Visit(class TLvalueIdentifierIndexed*)      = 0;
     virtual void Visit(class TMemberMethodDeclaration*)      = 0;
     virtual void Visit(class TMemberVariableDeclaration*)    = 0;
     virtual void Visit(class TMethodInvocation*)             = 0;
@@ -55,6 +52,7 @@ public:
     virtual void Visit(class TBooleanType*)                  = 0;
     virtual void Visit(class TVoidType*)                     = 0;
     virtual void Visit(class TIdentifierType*)               = 0;
+    virtual void Visit(class TUnaryMinusExpression*)         = 0;
 };
 
 #endif//COMPILER_I_VISITOR_HH

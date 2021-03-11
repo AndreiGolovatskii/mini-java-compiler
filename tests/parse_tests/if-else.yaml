@@ -8,6 +8,7 @@ Classes:
         return-type:
           kind: void type
           is-array: false
+        arguments: ~
         statements:
           - kind: variable declaration statement
             variable-type:
@@ -19,7 +20,7 @@ Classes:
               kind: int expression
               value: 5
             lvalue:
-              kind: lvalue identifier
+              kind: identifier expression
               identifier: x
           - kind: if statement
             condition:

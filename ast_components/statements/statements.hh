@@ -6,7 +6,6 @@
 #include "declarations/variable_declaration.hh"
 #include "expressions/expression_base.hh"
 #include "invocation.hh"
-#include "lvalue.hh"
 
 class TStatement : public INode {};
 
@@ -97,6 +96,7 @@ public:
     void Accept(IVisitor* visitor) override {
         visitor->Visit(this);
     }
+
 private:
     TStatementPtr ElseStatement_;
 };
@@ -151,13 +151,13 @@ using TPrintlnStatementPtr = std::unique_ptr<TPrintlnStatement>;
 
 class TAssignmentStatement : public TStatement {
 public:
-    explicit TAssignmentStatement(TLvaluePtr&& lvalue, TExpressionPtr&& expression)
+    explicit TAssignmentStatement(TExpressionPtr&& lvalue, TExpressionPtr&& expression)
         : Lvalue_(std::move(lvalue)), Expression_(std::move(expression)) {}
     void Accept(IVisitor* visitor) override {
         visitor->Visit(this);
     }
 
-    TLvalue* Lvalue() {
+    TExpression* Lvalue() {
         return Lvalue_.get();
     }
 
@@ -166,7 +166,7 @@ public:
     }
 
 private:
-    TLvaluePtr Lvalue_;
+    TExpressionPtr Lvalue_;
     TExpressionPtr Expression_;
 };
 

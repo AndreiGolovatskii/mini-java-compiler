@@ -8,6 +8,7 @@ Classes:
         return-type:
           kind: void type
           is-array: false
+        arguments: ~
         statements:
           - kind: print statement
             expression:
@@ -68,35 +69,35 @@ Classes:
                 kind: int expression
                 value: 1
               lvalue:
-                kind: lvalue identifier
+                kind: identifier expression
                 identifier: num_aux
             else statement:
               kind: assignment statement
               expression:
-                kind: method invocation expression
-                invocation:
-                  kind: method invocation
-                  method: ComputeFac
-                  expression:
-                    kind: mul expression
-                    lhs:
-                      kind: identifier expression
-                      identifier: num
-                    rhs:
+                kind: mul expression
+                lhs:
+                  kind: identifier expression
+                  identifier: num
+                rhs:
+                  kind: method invocation expression
+                  invocation:
+                    kind: method invocation
+                    method: ComputeFac
+                    expression:
                       kind: identifier expression
                       identifier: this
-                  arguments:
-                    - kind: sub expression
-                      lhs:
-                        kind: identifier expression
-                        identifier: num
-                      rhs:
-                        kind: int expression
-                        value: 1
+                    arguments:
+                      - kind: sub expression
+                        lhs:
+                          kind: identifier expression
+                          identifier: num
+                        rhs:
+                          kind: int expression
+                          value: 1
               lvalue:
-                kind: lvalue identifier
+                kind: identifier expression
                 identifier: num_aux
           - kind: return statement
-            statement:
+            expression:
               kind: identifier expression
               identifier: num_aux

@@ -1,0 +1,127 @@
+Classes:
+  - kind: class
+    name: Proxy
+    members:
+      - kind: member variable declaration
+        name: Member
+        variable-type:
+          kind: int type
+          is-array: true
+      - kind: method
+        is-static: false
+        name: Init
+        return-type:
+          kind: void type
+          is-array: false
+        arguments:
+          - name: cnt
+            type:
+              kind: int type
+              is-array: false
+        statements:
+          - kind: assignment statement
+            expression:
+              kind: new array expression
+              value-type:
+                kind: int type
+                is-array: false
+              size:
+                kind: identifier expression
+                identifier: cnt
+            lvalue:
+              kind: identifier expression
+              identifier: member
+      - kind: method
+        is-static: false
+        name: GetMember
+        return-type:
+          kind: int type
+          is-array: true
+        arguments: ~
+        statements:
+          - kind: return statement
+            expression:
+              kind: identifier expression
+              identifier: Member
+      - kind: method
+        is-static: false
+        name: GetMemberToo
+        return-type:
+          kind: int type
+          is-array: true
+        arguments: ~
+        statements:
+          - kind: return statement
+            expression:
+              kind: field invocation expression
+              invocation:
+                kind: field invocation
+                identifier: Member
+  - kind: class
+    name: Main
+    members:
+      - kind: method
+        is-static: true
+        name: main
+        return-type:
+          kind: void type
+          is-array: false
+        arguments: ~
+        statements:
+          - kind: variable declaration statement
+            variable-type:
+              kind: identifier type
+              identifier: Proxy
+              is-array: false
+            variable-name: proxy
+          - statement: method invocation statement
+            invocation:
+              kind: method invocation
+              method: Init
+              expression:
+                kind: identifier expression
+                identifier: proxy
+              arguments:
+                - kind: sum expression
+                  lhs:
+                    kind: int expression
+                    value: 100
+                  rhs:
+                    kind: int expression
+                    value: 1
+          - kind: assignment statement
+            expression:
+              kind: int expression
+              value: -5
+            lvalue:
+              kind: index expression
+              expression:
+                kind: method invocation expression
+                invocation:
+                  kind: method invocation
+                  method: GetMember
+                  expression:
+                    kind: identifier expression
+                    identifier: proxy
+                  arguments: ~
+              index:
+                kind: int expression
+                value: 5
+          - kind: assignment statement
+            expression:
+              kind: int expression
+              value: -4
+            lvalue:
+              kind: index expression
+              expression:
+                kind: method invocation expression
+                invocation:
+                  kind: method invocation
+                  method: GetMemberToo
+                  expression:
+                    kind: identifier expression
+                    identifier: proxy
+                  arguments: ~
+              index:
+                kind: int expression
+                value: 4
