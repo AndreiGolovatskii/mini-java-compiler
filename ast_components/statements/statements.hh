@@ -94,6 +94,9 @@ public:
         return ElseStatement_.get();
     }
 
+    void Accept(IVisitor* visitor) override {
+        visitor->Visit(this);
+    }
 private:
     TStatementPtr ElseStatement_;
 };

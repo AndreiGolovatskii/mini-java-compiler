@@ -409,7 +409,7 @@ private:
         result["kind"] = prefix + " expression";
         expression->Lhs()->Accept(this);
         result["lhs"] = Return_;
-        expression->Lhs()->Accept(this);
+        expression->Rhs()->Accept(this);
         result["rhs"] = Return_;
 
         Return_.reset();

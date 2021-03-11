@@ -253,12 +253,14 @@ type_identifier:
         $$ = std::make_unique<TIdentifierType>(std::move($1));
     }
 
+%nonassoc NO_ELSE;
+%nonassoc "else";
 
 statement:
     "assert" "(" expr ")" ";" {$$ = std::make_unique<TAssertionStatement>(std::move($3));}
     | local_variable_declaration {$$ = std::move($1);}
     | "{" statement_list "}" {$$ = std::move($2);}
-    | "if"  "(" expr ")" statement {$$ = std::make_unique<TIfStatement>(std::move($3), std::move($5));}
+    | "if"  "(" expr ")" statement %prec NO_ELSE {$$ = std::make_unique<TIfStatement>(std::move($3), std::move($5));}
     | "if"  "(" expr ")" statement "else" statement {
         $$ = std::make_unique<TIfElseStatement>(std::move($3), std::move($5), std::move($7));
     }
@@ -321,13 +323,15 @@ lvalue:
         $$ = std::make_unique<TLvalueFieldInvocation>(std::move($1));
     }
 
-
+%nonassoc "[";
+%nonassoc ".";
 %right "||";
 %right "&&";
 %precedence "!";
 %left ">" "<" "<=" ">=" "==";
 %left "+" "-";
 %left "*" "/" "%";
+
 
 
 expr:
@@ -347,7 +351,7 @@ expr:
     | expr "%" expr {$$ = std::make_unique<TModExpression>(std::move($1), std::move($3));}
 
     | expr "[" expr "]"  {$$ = std::make_unique<TIndexExpression>(std::move($1), std::move($3));}
-    | expr "." "length" {$$ = std::make_unique<TLengthExpression>(std::move($1));}
+    | expr "."  "length" {$$ = std::make_unique<TLengthExpression>(std::move($1));}
     | "new" simple_type "[" expr "]" {$$ = std::make_unique<TNewArrayExpression>(std::move($2), std::move($4));}
     | "new" type_identifier "(" ")" {$$ = std::make_unique<TNewExpression>(std::move($2));}
     | "!" expr {$$ = std::make_unique<TNotExpression>(std::move($2));}

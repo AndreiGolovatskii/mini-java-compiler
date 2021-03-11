@@ -21,13 +21,8 @@ Classes:
                   kind: int expression
                   value: -1
               rhs:
-                kind: sub expression
-                lhs:
-                  kind: int expression
-                  value: -1
-                rhs:
-                  kind: int expression
-                  value: -1
+                kind: int expression
+                value: 0
           - kind: assert statement
             expresion:
               kind: eq expression
@@ -37,16 +32,16 @@ Classes:
                   kind: int expression
                   value: 2
                 rhs:
-                  kind: int expression
-                  value: 2
+                  kind: mul expression
+                  lhs:
+                    kind: int expression
+                    value: 3
+                  rhs:
+                    kind: int expression
+                    value: 2
               rhs:
-                kind: sum expression
-                lhs:
-                  kind: int expression
-                  value: 2
-                rhs:
-                  kind: int expression
-                  value: 2
+                kind: int expression
+                value: 8
           - kind: assert statement
             expresion:
               kind: eq expression
@@ -56,16 +51,16 @@ Classes:
                   kind: int expression
                   value: 2
                 rhs:
-                  kind: int expression
-                  value: 2
+                  kind: div expression
+                  lhs:
+                    kind: int expression
+                    value: 4
+                  rhs:
+                    kind: int expression
+                    value: 2
               rhs:
-                kind: sum expression
-                lhs:
-                  kind: int expression
-                  value: 2
-                rhs:
-                  kind: int expression
-                  value: 2
+                kind: int expression
+                value: 4
           - kind: assert statement
             expresion:
               kind: eq expression
@@ -75,16 +70,16 @@ Classes:
                   kind: int expression
                   value: 2
                 rhs:
-                  kind: int expression
-                  value: 2
+                  kind: div expression
+                  lhs:
+                    kind: int expression
+                    value: 4
+                  rhs:
+                    kind: int expression
+                    value: 2
               rhs:
-                kind: sub expression
-                lhs:
-                  kind: int expression
-                  value: 2
-                rhs:
-                  kind: int expression
-                  value: 2
+                kind: int expression
+                value: 0
           - kind: assert statement
             expresion:
               kind: eq expression
@@ -94,16 +89,16 @@ Classes:
                   kind: int expression
                   value: 2
                 rhs:
-                  kind: int expression
-                  value: 2
+                  kind: mod expression
+                  lhs:
+                    kind: int expression
+                    value: 4
+                  rhs:
+                    kind: int expression
+                    value: 3
               rhs:
-                kind: sum expression
-                lhs:
-                  kind: int expression
-                  value: 2
-                rhs:
-                  kind: int expression
-                  value: 2
+                kind: int expression
+                value: 3
           - kind: assert statement
             expresion:
               kind: le expression
@@ -114,15 +109,15 @@ Classes:
                   value: 1
                 rhs:
                   kind: int expression
-                  value: 1
+                  value: 2
               rhs:
                 kind: sum expression
                 lhs:
                   kind: int expression
-                  value: 1
+                  value: 2
                 rhs:
                   kind: int expression
-                  value: 1
+                  value: 3
           - kind: assert statement
             expresion:
               kind: and  expression
@@ -135,13 +130,13 @@ Classes:
                   kind: int expression
                   value: 1
               rhs:
-                kind: leq expression
+                kind: le expression
                 lhs:
                   kind: int expression
                   value: 1
                 rhs:
                   kind: int expression
-                  value: 1
+                  value: 2
           - kind: assert statement
             expresion:
               kind: or expression
@@ -152,12 +147,12 @@ Classes:
                   value: 1
                 rhs:
                   kind: int expression
-                  value: 1
+                  value: 2
               rhs:
                 kind: ge expression
                 lhs:
                   kind: int expression
-                  value: 1
+                  value: 3
                 rhs:
                   kind: int expression
-                  value: 1
+                  value: 2

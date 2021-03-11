@@ -46,27 +46,53 @@ Classes:
                 kind: identifier expression
                 identifier: num
               rhs:
-                kind: identifier expression
-                identifier: num
+                kind: int expression
+                value: -1
           - kind: variable declaration statement
             variable-type:
               kind: int type
               is-array: false
             variable-name: num_aux
-          - kind: if statement
+          - kind: if-else statement
             condition:
               kind: eq expression
               lhs:
                 kind: identifier expression
                 identifier: num
               rhs:
-                kind: identifier expression
-                identifier: num
-            statement:
+                kind: int expression
+                value: 0
+            if statement:
               kind: assignment statement
               expression:
                 kind: int expression
                 value: 1
+              lvalue:
+                kind: lvalue identifier
+                identifier: num_aux
+            else statement:
+              kind: assignment statement
+              expression:
+                kind: method invocation expression
+                invocation:
+                  kind: method invocation
+                  method: ComputeFac
+                  expression:
+                    kind: mul expression
+                    lhs:
+                      kind: identifier expression
+                      identifier: num
+                    rhs:
+                      kind: identifier expression
+                      identifier: this
+                  arguments:
+                    - kind: sub expression
+                      lhs:
+                        kind: identifier expression
+                        identifier: num
+                      rhs:
+                        kind: int expression
+                        value: 1
               lvalue:
                 kind: lvalue identifier
                 identifier: num_aux
