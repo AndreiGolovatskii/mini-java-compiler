@@ -204,20 +204,17 @@ private:
     using lvalue = std::unordered_map<std::string, int>::iterator;
     std::variant<int, lvalue> ReturnValue_;
 
-
-    template<class... Ts>
-    struct overloaded : Ts... {
-        using Ts::operator()...;
-    };
-    template<class... Ts>
-    overloaded(Ts...) -> overloaded<Ts...>;
-
     int GetReturnValue_() {
-        return std::visit(overloaded{
-                                  [](int value) { return value; },
-                                  [](lvalue& lvalue) { return lvalue->second; },
-                          },
-                          ReturnValue_);
+        return std::visit(
+                [](auto&& arg) {
+                    using T = std::decay_t<decltype(arg)>;
+                    if constexpr (std::is_same_v<T, int>) {
+                        return arg;
+                    } else {
+                        return arg->second;
+                    }
+                },
+                ReturnValue_);
     }
 
     std::ostream& Out_;
