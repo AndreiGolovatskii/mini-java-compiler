@@ -5,6 +5,7 @@
 #include <functional>
 #include <string>
 #include <unordered_map>
+#include <variant>
 
 #include "ast_components.hh"
 #include "i_visitor.hh"
