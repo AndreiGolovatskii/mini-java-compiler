@@ -35,6 +35,6 @@ jobs:
           make
       - name: Test
         run: |
-          cp build/Tests tests
+          cp ./build/tests/Tests ./tests
           cd tests
           ./Tests
