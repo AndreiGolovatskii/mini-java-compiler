@@ -126,6 +126,8 @@
 %nterm <TExpressionListPtr> expr_comma_separated_list
 %nterm <TExpressionListPtr> expr_comma_separated_list_prefix
 
+%expect 0
+
 %%
 %start program;
 
