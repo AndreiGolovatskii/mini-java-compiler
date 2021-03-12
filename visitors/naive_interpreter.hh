@@ -202,7 +202,7 @@ private:
 
     std::unordered_map<std::string, int> Variables_;
     using lvalue = std::unordered_map<std::string, int>::iterator;
-    std::variant<int, lvalue> ReturnValue_;
+    std::variant<int, lvalue> ReturnValue_;// store value or iterator to lvalue, so use GetReturnValue_ to use as rvalue
 
     int GetReturnValue_() {
         return std::visit(

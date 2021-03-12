@@ -11,7 +11,7 @@
 class TYamlVisitor : public IVisitor {
 public:
     void Visit(struct TAndExpression* expression) override {
-        BinaryExpression_("and ", expression);
+        ProcessBinaryExpression_("and ", expression);
     }
 
     void Visit(struct TAssertionStatement* statement) override {
@@ -20,9 +20,9 @@ public:
         statement->Expression()->Accept(this);
         result["expresion"] = Return_;
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
+
     void Visit(struct TAssignmentStatement* statement) override {
         YAML::Node result;
         result["kind"] = "assignment statement";
@@ -31,12 +31,13 @@ public:
         statement->Lvalue()->Accept(this);
         result["lvalue"] = Return_;
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
+
     void Visit(struct TBooleanExpression* expression) override {
-        ValueExpression_("boolean", expression);
+        ProcessValueExpression_("boolean", expression);
     }
+
     void Visit(struct TClassDeclaration* declaration) override {
         YAML::Node result;
         result["kind"] = "class";
@@ -44,61 +45,67 @@ public:
         declaration->Members().Accept(this);
         result["members"] = Return_;
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
+
     void Visit(struct TClassMemberDeclarationList* list) override {
-        List_(list);
+        ProcessList_(list);
     }
+
     void Visit(struct TDivExpression* expression) override {
-        BinaryExpression_("div", expression);
+        ProcessBinaryExpression_("div", expression);
     }
+
     void Visit(struct TEqExpression* expression) override {
-        BinaryExpression_("eq", expression);
+        ProcessBinaryExpression_("eq", expression);
     }
+
     void Visit(struct TExpressionList* list) override {
-        List_(list);
+        ProcessList_(list);
     }
+
     void Visit(struct TFieldInvocation* invocation) override {
         YAML::Node result;
         result["kind"]       = "field invocation";
         result["identifier"] = invocation->Identifier();
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
+
     void Visit(struct TFieldInvocationExpression* expression) override {
         YAML::Node result;
         result["kind"] = "field invocation expression";
         expression->Method()->Accept(this);
         result["invocation"] = Return_;
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
+
     void Visit(struct TFieldInvocationIndexed* invocationIndexed) override {
         YAML::Node result;
         result["kind"] = "field invocation indexed";
         invocationIndexed->Index()->Accept(this);
         result["index"] = Return_;
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
+
     void Visit(struct TGeExpression* expression) override {
-        BinaryExpression_("ge", expression);
+        ProcessBinaryExpression_("ge", expression);
     }
+
     void Visit(struct TGeqExpression* expression) override {
-        BinaryExpression_("geq", expression);
+        ProcessBinaryExpression_("geq", expression);
     }
+
     void Visit(struct TIdentifierExpression* expression) override {
         YAML::Node result;
         result["kind"]       = "identifier expression";
         result["identifier"] = expression->Identifier();
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
+
     void Visit(struct TIfElseStatement* statement) override {
         YAML::Node result;
         result["kind"] = "if-else statement";
@@ -112,9 +119,9 @@ public:
         statement->ElseStatement()->Accept(this);
         result["else statement"] = Return_;
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
+
     void Visit(struct TIfStatement* statement) override {
         YAML::Node result;
         result["kind"] = "if statement";
@@ -125,9 +132,9 @@ public:
         statement->Statement()->Accept(this);
         result["statement"] = Return_;
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
+
     void Visit(struct TIndexExpression* expression) override {
         YAML::Node result;
         result["kind"] = "index expression";
@@ -138,28 +145,32 @@ public:
         expression->Index()->Accept(this);
         result["index"] = Return_;
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
+
     void Visit(struct TIntExpression* expression) override {
-        ValueExpression_("int", expression);
+        ProcessValueExpression_("int", expression);
     }
+
     void Visit(struct TLeExpression* expression) override {
-        BinaryExpression_("le", expression);
+        ProcessBinaryExpression_("le", expression);
     }
+
     void Visit(struct TStatementList* list) override {
-        List_(list);
+        ProcessList_(list);
     }
+
     void Visit(struct TLengthExpression* expression) override {
         YAML::Node result;
         result["kind"] = "length expression";
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
+
     void Visit(struct TLeqExpression* expression) override {
-        BinaryExpression_("leq", expression);
+        ProcessBinaryExpression_("leq", expression);
     }
+
     void Visit(struct TMemberMethodDeclaration* declaration) override {
         YAML::Node result;
         result["kind"]      = "method";
@@ -185,9 +196,9 @@ public:
         declaration->Statements()->Accept(this);
         result["statements"] = Return_;
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
+
     void Visit(struct TMemberVariableDeclaration* declaration) override {
         YAML::Node result;
         result["kind"] = "member variable declaration";
@@ -196,9 +207,9 @@ public:
         declaration->Variable().Type()->Accept(this);
         result["variable-type"] = Return_;
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
+
     void Visit(struct TMethodInvocation* invocation) override {
         YAML::Node result;
         result["kind"]   = "method invocation";
@@ -210,8 +221,7 @@ public:
         invocation->Arguments()->Accept(this);
         result["arguments"] = Return_;
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
 
     void Visit(struct TMethodInvocationExpression* expression) override {
@@ -220,8 +230,7 @@ public:
         expression->Invocation()->Accept(this);
         result["invocation"] = Return_;
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
 
     void Visit(struct TMethodInvocationStatement* statement) override {
@@ -231,15 +240,17 @@ public:
         statement->Method()->Accept(this);
         result["invocation"] = Return_;
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
+
     void Visit(struct TModExpression* expression) override {
-        BinaryExpression_("mod", expression);
+        ProcessBinaryExpression_("mod", expression);
     }
+
     void Visit(struct TMulExpression* expression) override {
-        BinaryExpression_("mul", expression);
+        ProcessBinaryExpression_("mul", expression);
     }
+
     void Visit(struct TNewArrayExpression* expression) override {
         YAML::Node result;
         result["kind"] = "new array expression";
@@ -250,9 +261,9 @@ public:
         expression->Size()->Accept(this);
         result["size"] = Return_;
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
+
     void Visit(struct TNewExpression* expression) override {
         YAML::Node result;
         result["kind"] = "new expression";
@@ -260,9 +271,9 @@ public:
         expression->Type()->Accept(this);
         result["value-type"] = Return_;
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
+
     void Visit(struct TNotExpression* expression) override {
         YAML::Node result;
         result["kind"] = "not expression";
@@ -270,12 +281,13 @@ public:
         expression->Expression()->Accept(this);
         result["expression"] = Return_;
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
+
     void Visit(struct TOrExpression* expression) override {
-        BinaryExpression_("or", expression);
+        ProcessBinaryExpression_("or", expression);
     }
+
     void Visit(struct TPrintlnStatement* statement) override {
         YAML::Node result;
         result["kind"] = "print statement";
@@ -283,39 +295,43 @@ public:
         statement->Expression()->Accept(this);
         result["expression"] = Return_;
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
 
     void Visit(struct TProgram* program) override {
         program->ClassDeclarations().Accept(this);
         Root_["Classes"] = Return_;
     }
+
     void Visit(struct TReturnStatement* statements) override {
         YAML::Node result;
         result["kind"] = "return statement";
+
         statements->Expression()->Accept(this);
         result["expression"] = Return_;
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
+
     void Visit(struct TClassDeclarationList* list) override {
-        List_(list);
+        ProcessList_(list);
     }
+
     void Visit(struct TSubExpression* expression) override {
-        BinaryExpression_("sub", expression);
+        ProcessBinaryExpression_("sub", expression);
     }
+
     void Visit(struct TSumExpression* expression) override {
-        BinaryExpression_("sum", expression);
+        ProcessBinaryExpression_("sum", expression);
     }
+
     void Visit(struct TThisExpression* expression) override {
         YAML::Node result;
         result["kind"] = "this expression";
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
+
     void Visit(struct TVariableDeclarationStatement* statement) override {
         YAML::Node result;
         result["kind"] = "variable declaration statement";
@@ -325,9 +341,9 @@ public:
 
         result["variable-name"] = statement->Variable().Name();
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
+
     void Visit(struct TWhileStatement* statement) override {
         YAML::Node result;
         result["kind"] = "while statement";
@@ -338,86 +354,91 @@ public:
         statement->Statement()->Accept(this);
         result["statement"] = Return_;
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
 
     void Visit(struct TIntType* type) override {
-        Type_("int", type);
+        ProcessType_("int", type);
     }
+
     void Visit(struct TBooleanType* type) override {
-        Type_("boolean", type);
+        ProcessType_("boolean", type);
     }
+
     void Visit(struct TVoidType* type) override {
-        Type_("void", type);
+        ProcessType_("void", type);
     }
+
     void Visit(struct TIdentifierType* type) override {
         YAML::Node result;
         result["kind"]       = "identifier type";
         result["identifier"] = type->Identifier();
         result["is-array"]   = type->IsArray();
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
+    }
+
+    void Visit(struct TUnaryMinusExpression* expression) override {
+        YAML::Node result;
+        result["kind"] = "unary minus expression";
+
+        expression->Expression()->Accept(this);
+        result["expression"] = Return_;
+
+        SetReturn_(result);
     }
 
     void Print(std::ostream& out) const {
         out << Root_;
-    }
-    void Visit(struct TUnaryMinusExpression* expression) override {
-        YAML::Node result;
-        result["kind"] = "unary minus expression";
-        expression->Expression()->Accept(this);
-        result["expression"] = Return_;
-
-        Return_.reset();
-        Return_ = result;
     }
 
 private:
     YAML::Node Root_;
     YAML::Node Return_;
 
+    void SetReturn_(YAML::Node& result) {
+        Return_.reset();
+        Return_ = result;
+    }
+
     template<typename T>
-    void List_(T* list) {
+    void ProcessList_(T* list) {
         YAML::Node result;
         for (const auto& elem : *list) {
             elem->Accept(this);
             result.push_back(Return_);
         }
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
 
-    void BinaryExpression_(const std::string& prefix, TBinaryExpression* expression) {
+    void ProcessBinaryExpression_(const std::string& prefix, TBinaryExpression* expression) {
         YAML::Node result;
         result["kind"] = prefix + " expression";
+
         expression->Lhs()->Accept(this);
         result["lhs"] = Return_;
+
         expression->Rhs()->Accept(this);
         result["rhs"] = Return_;
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
 
     template<typename T>
-    void ValueExpression_(const std::string& prefix, T* expression) {
+    void ProcessValueExpression_(const std::string& prefix, T* expression) {
         YAML::Node result;
         result["kind"]  = prefix + " expression";
         result["value"] = expression->GetValue();
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
 
-    void Type_(const std::string& prefix, TType* type) {
+    void ProcessType_(const std::string& prefix, TType* type) {
         YAML::Node result;
         result["kind"]     = prefix + " type";
         result["is-array"] = type->IsArray();
 
-        Return_.reset();
-        Return_ = result;
+        SetReturn_(result);
     }
 };
 
