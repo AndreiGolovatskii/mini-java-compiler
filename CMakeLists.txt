@@ -10,28 +10,27 @@ set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,readability-*,-warnings-as-errors
 set(CMAKE_CXX_STANDARD 20)
 set(COMPILE_FLAGS -Wall -Wextra -pedantic -Werror)
 
-include_directories(driver grammar ast_components visitors)
-
 add_subdirectory(grammar)
 add_subdirectory(driver)
 add_subdirectory(ast_components)
 add_subdirectory(visitors)
+add_subdirectory(symbol_table)
 
 
 add_library(
-        LibCompiler
+        Compiler
         INTERFACE
 )
 
-target_link_libraries(LibCompiler INTERFACE LibDriver LibGrammar Visitors)
+target_link_libraries(Compiler INTERFACE Driver Grammar Visitors SymbolTable)
 
 add_executable(
-        Compiler
+        CompilerExe
         main.cpp
         ${HEADERS}
 )
 
-target_link_libraries(Compiler LibCompiler)
+target_link_libraries(CompilerExe Compiler)
 
 
 add_subdirectory(tests)

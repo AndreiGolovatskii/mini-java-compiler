@@ -11,31 +11,34 @@ find_package(BISON 3.5 REQUIRED)
 BISON_TARGET(
         MyParser
         parser.y
-        ${compiler_SOURCE_DIR}/grammar/parser.cpp
-        DEFINES_FILE ${compiler_SOURCE_DIR}/grammar/parser.hh
+        ${CMAKE_CURRENT_SOURCE_DIR}/parser.cpp
+        DEFINES_FILE ${CMAKE_CURRENT_SOURCE_DIR}/parser.hh
 )
 
 find_package(FLEX 2.6 REQUIRED)
 FLEX_TARGET(
         MyScanner
         scanner.l
-        ${compiler_SOURCE_DIR}/grammar/scanner.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/scanner.cpp
 )
 
 ADD_FLEX_BISON_DEPENDENCY(MyScanner MyParser)
 
 add_library(
-        LibGrammar
+        Grammar
         ${BISON_MyParser_OUTPUTS}
         ${FLEX_MyScanner_OUTPUTS}
 )
 
 set_target_properties(
-        LibGrammar
+        Grammar
         PROPERTIES
         CXX_CLANG_TIDY ""
         COMPILE_FLAGS ""
 )
 
 
-target_include_directories(LibGrammar PUBLIC ${FLEX_INCLUDE_DIRS})
+target_include_directories(Grammar SYSTEM PUBLIC ${FLEX_INCLUDE_DIRS})
+target_include_directories(Grammar PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(Grammar PUBLIC AstComponents)
+target_link_libraries(Grammar PUBLIC Driver)
