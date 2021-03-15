@@ -1,0 +1,53 @@
+Classes:
+  - kind: class
+    name: IfElse
+    members:
+      - kind: method
+        is-static: true
+        name: main
+        return-type:
+          kind: void type
+          is-array: false
+        arguments: ~
+        statements:
+          - kind: variable declaration statement
+            variable-type:
+              kind: int type
+              is-array: false
+            variable-name: x
+          - kind: assignment statement
+            expression:
+              kind: int expression
+              value: 5
+            lvalue:
+              kind: identifier expression
+              identifier: x
+          - kind: if statement
+            condition:
+              kind: ge expression
+              lhs:
+                kind: identifier expression
+                identifier: x
+              rhs:
+                kind: int expression
+                value: 0
+            statement:
+              kind: if-else statement
+              condition:
+                kind: ge expression
+                lhs:
+                  kind: identifier expression
+                  identifier: x
+                rhs:
+                  kind: int expression
+                  value: 10
+              if statement:
+                kind: assert statement
+                expresion:
+                  kind: boolean expression
+                  value: false
+              else statement:
+                kind: assert statement
+                expresion:
+                  kind: boolean expression
+                  value: true

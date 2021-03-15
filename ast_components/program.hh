@@ -5,9 +5,16 @@
 #include <memory>
 #include <vector>
 
-class TProgram {
+class TProgram : public INode {
 public:
     explicit TProgram(TClassDeclarationList&& classDeclarations) : ClassDeclarations_(std::move(classDeclarations)) {}
+    void Accept(IVisitor* visitor) override {
+        visitor->Visit(this);
+    }
+
+    TClassDeclarationList& ClassDeclarations() {
+        return ClassDeclarations_;
+    }
 
 private:
     TClassDeclarationList ClassDeclarations_;

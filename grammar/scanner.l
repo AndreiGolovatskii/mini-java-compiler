@@ -12,7 +12,7 @@
 %option noyywrap nounput noinput batch debug
 
 %option c++
-%option yyclass="Scanner"
+%option yyclass="TScanner"
 
 %{
   // A number symbol corresponding to the value in S.
@@ -56,6 +56,9 @@ blank [ \t\r]
 ")"        return yy::parser::make_RPAREN  (loc);
 "{"        return yy::parser::make_LEFTSCOPE(loc);
 "}"        return yy::parser::make_RIGHTSCOPE(loc);
+"[]"       return yy::parser::make_DOUBLEBRACKET(loc);
+"["        return yy::parser::make_LBRACKET(loc);
+"]"        return yy::parser::make_RBRACKET(loc);
 "="        return yy::parser::make_ASSIGN (loc);
 "::"       return yy::parser::make_DOUBLE_COLON(loc);
 ","        return yy::parser::make_COMMA(loc);
@@ -90,7 +93,7 @@ blank [ \t\r]
 
 
 
-[0-9]+      return make_NUMBER(yytext, loc);
+{int}      return make_NUMBER(yytext, loc);
 {id}       return yy::parser::make_IDENTIFIER(yytext, loc);
 
 .          {

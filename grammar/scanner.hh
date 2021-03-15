@@ -5,16 +5,15 @@
 #endif
 
 #undef YY_DECL
-#define YY_DECL yy::parser::symbol_type Scanner::ScanToken()
+#define YY_DECL yy::parser::symbol_type TScanner::ScanToken()
 
 #include "parser.hh"
-
 class TDriver;
 
-class Scanner : public yyFlexLexer {
+class TScanner : public yyFlexLexer {
 public:
-    Scanner(TDriver& driver) : driver(driver) {}
-    virtual ~Scanner() {}
+    explicit TScanner(TDriver& driver) : driver(driver) {}
+    ~TScanner() override = default;
     virtual yy::parser::symbol_type ScanToken();
     TDriver& driver;
 };

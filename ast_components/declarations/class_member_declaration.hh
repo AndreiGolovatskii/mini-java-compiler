@@ -7,16 +7,18 @@
 #include "types/type.hh"
 
 
-class TClassMemberDeclaration {
-public:
-    virtual ~TClassMemberDeclaration() = default;
-};
+class TClassMemberDeclaration : public INode {};
 
 
 using TClassMemberDeclarationPtr = std::unique_ptr<TClassMemberDeclaration>;
 
 
-class TClassMemberDeclarationList : public TClassMemberDeclaration, public std::vector<TClassMemberDeclarationPtr> {};
+class TClassMemberDeclarationList : public TClassMemberDeclaration, public std::vector<TClassMemberDeclarationPtr> {
+public:
+    void Accept(IVisitor* visitor) override {
+        visitor->Visit(this);
+    }
+};
 
 
 using TDeclarationListPtr = std::unique_ptr<TClassMemberDeclarationList>;

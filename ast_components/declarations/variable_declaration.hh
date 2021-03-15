@@ -8,14 +8,21 @@
 #include "declarations/variable.hh"
 
 
-class TVariableDeclaration : public TClassMemberDeclaration {
+class TMemberVariableDeclaration : public TClassMemberDeclaration {
 public:
-    explicit TVariableDeclaration(TVariable&& variable) : Variable_(std::move(variable)) {}
+    explicit TMemberVariableDeclaration(TVariable&& variable) : Variable_(std::move(variable)) {}
+    void Accept(IVisitor* visitor) override {
+        visitor->Visit(this);
+    }
+
+    [[nodiscard]] const TVariable& Variable() const {
+        return Variable_;
+    }
 
 private:
     TVariable Variable_;
 };
 
-using TVariableDeclarationPtr = std::unique_ptr<TVariableDeclaration>;
+using TMemberVariableDeclarationPtr = std::unique_ptr<TMemberVariableDeclaration>;
 
 #endif//COMPILER_VARIABLE_DECLARATION_HH

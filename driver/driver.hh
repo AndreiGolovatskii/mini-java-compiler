@@ -4,7 +4,7 @@
 
 #include "parser.hh"
 #include "program.hh"
-#include "scanner.h"
+#include "scanner.hh"
 
 
 class TDriver {
@@ -17,10 +17,9 @@ public:
     bool trace_parsing  = false;
     bool trace_scanning = false;
     yy::location location;
-    Scanner scanner;
+    TScanner scanner;
     yy::parser parser;
     TProgramPtr Program_;
-
 
     void scan_begin();
 
