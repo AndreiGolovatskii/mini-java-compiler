@@ -22,15 +22,15 @@ FLEX_TARGET(
         ${CMAKE_CURRENT_SOURCE_DIR}/scanner.cpp
 )
 
-ADD_FLEX_BISON_DEPENDENCY(MyScanner MyParser)
+ADD_FLEX_BISON_DEPENDENCY(Scanner Parser)
 
 add_library(
         Driver
         driver.cpp
         driver.hh
         scanner.hh
-        ${BISON_MyParser_OUTPUTS}
-        ${FLEX_MyScanner_OUTPUTS}
+        ${BISON_Parser_OUTPUTS}
+        ${FLEX_Scanner_OUTPUTS}
 )
 
 set_target_properties(
