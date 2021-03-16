@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 add_subdirectory(third-party/yaml-cpp EXCLUDE_FROM_ALL)
+add_subdirectory(third-party/googletest EXCLUDE_FROM_ALL)
 
 project(compiler)
 

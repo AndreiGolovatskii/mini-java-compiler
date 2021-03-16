@@ -1,5 +1,5 @@
 #include "driver.hh"
-//#include "parser.hh"
+#include "parser.hh"
 
 
 int TDriver::parse(const std::string& f) {

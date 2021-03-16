@@ -7,7 +7,6 @@
     #include <iostream>
     #include "driver.hh"
     #include "parser.hh"
-    #include "scanner.hh"
 %}
 
 %option noyywrap nounput noinput batch debug
