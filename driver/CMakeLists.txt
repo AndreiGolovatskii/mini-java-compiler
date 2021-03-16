@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.10)
 
 add_library(Driver driver.cpp driver.hh)
 target_link_libraries(Driver PUBLIC Grammar)

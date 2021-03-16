@@ -1,0 +1,9 @@
+#ifndef COMPILER_SYMBOL_TABLE_HH
+#define COMPILER_SYMBOL_TABLE_HH
+
+class TSymbolTable {
+
+    
+};
+
+#endif//COMPILER_SYMBOL_TABLE_HH
