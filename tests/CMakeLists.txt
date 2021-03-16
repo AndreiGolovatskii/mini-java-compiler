@@ -6,6 +6,6 @@ target_link_libraries(Tests Compiler)
 
 find_package(Threads REQUIRED)
 include(GoogleTest)
-target_link_libraries(Tests gtest)
+target_link_libraries(Tests gtest_main)
 target_link_libraries(Tests ${GTEST_BOTH_LIBRARIES} ${GTEST_LIBRARIES} Threads::Threads)
 gtest_discover_tests(Tests WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
