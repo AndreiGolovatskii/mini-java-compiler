@@ -32,8 +32,7 @@ jobs:
           mkdir build
           cd build
           cmake ..
-          make
+          make Tests
       - name: Test
         run: |
-          cd bulid
           ctest
