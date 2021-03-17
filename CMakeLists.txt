@@ -1,6 +1,7 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.10)
 
 add_subdirectory(third-party/yaml-cpp EXCLUDE_FROM_ALL)
+add_subdirectory(third-party/googletest EXCLUDE_FROM_ALL)
 
 project(compiler)
 
@@ -10,28 +11,26 @@ set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,readability-*,-warnings-as-errors
 set(CMAKE_CXX_STANDARD 20)
 set(COMPILE_FLAGS -Wall -Wextra -pedantic -Werror)
 
-include_directories(driver grammar ast_components visitors)
-
-add_subdirectory(grammar)
 add_subdirectory(driver)
 add_subdirectory(ast_components)
 add_subdirectory(visitors)
+add_subdirectory(symbol_table)
 
 
 add_library(
-        LibCompiler
+        Compiler
         INTERFACE
 )
 
-target_link_libraries(LibCompiler INTERFACE LibDriver LibGrammar Visitors)
+target_link_libraries(Compiler INTERFACE Driver Visitors SymbolTable)
 
 add_executable(
-        Compiler
+        CompilerExe
         main.cpp
-        ${HEADERS}
 )
 
-target_link_libraries(Compiler LibCompiler)
+target_link_libraries(CompilerExe Compiler)
 
 
+enable_testing()
 add_subdirectory(tests)
