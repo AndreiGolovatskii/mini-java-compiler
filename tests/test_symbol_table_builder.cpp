@@ -1,35 +1,49 @@
-#pragma once
-
 #include <filesystem>
 #include <gtest/gtest.h>
 
 #include "driver.hh"
 #include "symbol_table_builder.hh"
+#include "types_utils.hh"
 
 
 class SymbolTableBuilder : public ::testing::Test {
 public:
-    TProgram* Parse(const std::filesystem::path& path) {
-        Driver_.parse(path.string());
-        return Driver_.Program_.get();
+    void BuildSymbolTree(const std::filesystem::path& path) {
+        TDriver driver;
+        driver.parse(path.string());
+
+        TSymbolTableBuilder builder;
+        builder.Accept(driver.Program_.get());
+        Table = std::move(builder.SymbolTable());
     }
 
-protected:
-    TDriver Driver_;
+    TSymbolTable Table;
 };
 
 
 TEST_F(SymbolTableBuilder, Sample) {
-    TProgram* program = Parse("./parse_tests/sample.java");
+    BuildSymbolTree("./symbol_table_tests/sample.java");
 
-    TSymbolTableBuilder tableBuilder;
-    program->Accept(&tableBuilder);
+    ASSERT_THROW((void) Table.Class("NoClass"), std::logic_error);
+    ASSERT_NO_THROW((void) Table.Class("Factorial"));
 
-    auto& symbolTable = tableBuilder.SymbolTable();
+    ASSERT_TRUE(Table.Class("Factorial")->Method("main")->IsStatic());
+    ASSERT_FALSE(Table.Class("Fac")->Method("ComputeFac")->IsStatic());
+}
 
-    ASSERT_THROW(symbolTable.Class("NoClass"), std::logic_error);
-    ASSERT_NO_THROW(symbolTable.Class("Factorial"));
+TEST_F(SymbolTableBuilder, CyclicReference) {
+    BuildSymbolTree("./symbol_table_tests/cyclic.java");
 
-    ASSERT_TRUE(symbolTable.Class("Factorial")->Method("main")->IsStatic());
-    ASSERT_FALSE(symbolTable.Class("Fac")->Method("ComputeFac")->IsStatic());
+    ASSERT_EQ(ClassTypeSpec(Table.Class("A")->Variable("VarB")->Type()), Table.Class("B"));
+    ASSERT_EQ(ClassTypeSpec(Table.Class("A")->Variable("VarA")->Type()), Table.Class("A"));
+
+    ASSERT_EQ(ClassTypeSpec(Table.Class("B")->Variable("VarA")->Type()), Table.Class("A"));
+
+    ASSERT_TRUE(IsEqual(Table.Class("A")->Variable("VarInt")->Type(), std::make_unique<TIntegerType>().get()));
+
+    ASSERT_EQ(ClassTypeSpec(Table.Class("A")->Method("methodA")->ReturnType()), Table.Class("A"));
+    ASSERT_EQ(ClassTypeSpec(Table.Class("A")->Method("methodB")->ReturnType()), Table.Class("B"));
+
+    ASSERT_EQ(ClassTypeSpec(Table.Class("A")->Method("methodA")->Args()[0].Type()), Table.Class("A"));
+    ASSERT_TRUE(Table.Class("A")->Method("methodB")->Args()[1].Name() == "argB");
 }

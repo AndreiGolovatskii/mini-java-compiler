@@ -200,10 +200,6 @@ public:
 private:
     struct TReturnException : public std::exception {};
 
-    std::unordered_map<std::string, int> Variables_;
-    using lvalue = std::unordered_map<std::string, int>::iterator;
-    std::variant<int, lvalue> ReturnValue_;// store value or iterator to lvalue, so use GetReturnValue_ to use as rvalue
-
     int GetReturnValue_() {
         return std::visit(
                 [](auto&& arg) {
@@ -217,7 +213,6 @@ private:
                 ReturnValue_);
     }
 
-    std::ostream& Out_;
 
     void BinaryExpression(TBinaryExpression* expression, const std::function<int(int, int)>& fun) {
         expression->Lhs()->Accept(this);
@@ -226,6 +221,12 @@ private:
         int r2       = GetReturnValue_();
         ReturnValue_ = fun(r1, r2);
     }
+
+private:
+    std::unordered_map<std::string, int> Variables_;
+    using lvalue = std::unordered_map<std::string, int>::iterator;
+    std::variant<int, lvalue> ReturnValue_;
+    std::ostream& Out_;
 };
 
 #endif//COMPILER_NAIVE_INTERPRETER_HH

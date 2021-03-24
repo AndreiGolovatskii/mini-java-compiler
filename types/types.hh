@@ -15,11 +15,15 @@ public:
 
 class TClassPtrType : public IType {
 public:
+    explicit TClassPtrType(TClassSpecification* spec) : Spec_(spec) {}
+
     size_t Size() override {
         return sizeof(void*);
     }
 
-    explicit TClassPtrType(TClassSpecification* spec) : Spec_(spec) {}
+    [[nodiscard]] TClassSpecification* Spec() const {
+        return Spec_;
+    }
 
 private:
     TClassSpecification* Spec_;

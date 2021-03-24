@@ -8,6 +8,13 @@
 
 class TSymbolTable {
 public:
+    TSymbolTable()                    = default;
+    TSymbolTable(const TSymbolTable&) = delete;
+    TSymbolTable& operator=(const TSymbolTable&) = delete;
+
+    TSymbolTable(TSymbolTable&&) = default;
+    TSymbolTable& operator=(TSymbolTable&&) = default;
+
     [[nodiscard]] TClassSpecification* Class(const std::string& name) const {
         if (ClassSpecifications_.contains(name)) {
             return ClassSpecifications_.at(name).get();

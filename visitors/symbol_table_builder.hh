@@ -47,11 +47,13 @@ public:
         });
     }
     void Visit(TClassDeclaration* declaration) override {
-        Table_.AddClass(declaration->ClassName());
         CurrentClass_ = declaration->ClassName();
         Accept(declaration->Members());
     }
     void Visit(TClassDeclarationList* list) override {
+        std::for_each(list->begin(), list->end(), [this](const auto& it) {
+            Table_.AddClass(it->ClassName());
+        });
         std::for_each(list->begin(), list->end(), [this](const auto& it) {
             it->Accept(this);
         });

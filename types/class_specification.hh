@@ -11,6 +11,14 @@ class TArgument {
 public:
     TArgument(std::string name, std::unique_ptr<IType>&& type) : Name_(std::move(name)), Type_(std::move(type)) {}
 
+    [[nodiscard]] IType* Type() const {
+        return Type_.get();
+    }
+
+    [[nodiscard]] const std::string& Name() const {
+        return Name_;
+    }
+
 private:
     std::string Name_;
     std::unique_ptr<IType> Type_;
@@ -24,6 +32,14 @@ public:
 
     [[nodiscard]] bool IsStatic() const {
         return IsStatic_;
+    }
+
+    [[nodiscard]] IType* ReturnType() const {
+        return ReturnType_.get();
+    }
+
+    [[nodiscard]] const std::vector<TArgument>& Args() const {
+        return Args_;
     }
 
 private:
@@ -57,13 +73,13 @@ public:
     explicit TClassSpecification(TClassSpecification* extends = nullptr) {
         assert(extends == nullptr);// TODO Extends
     }
+
     void AddVariable(const std::string& name, std::unique_ptr<IType> type, bool isStatic = false) {
         if (Variable_.contains(name)) {
             throw std::logic_error{"Compilation Error: Variable redefinition"};// TODO Errors
         }
         Variable_[name] = std::make_unique<TVariableSpecification>(std::move(type), isStatic);
     }
-
 
     void AddMethod(const std::string& name, std::unique_ptr<TMethodSpecification>&& method) {
         if (Methods_.contains(name)) {
@@ -83,7 +99,7 @@ public:
         if (Methods_.contains(name)) {
             return Methods_.at(name).get();
         }
-        throw std::logic_error{"Compilation Error: Undefined symbol"}; // TODO
+        throw std::logic_error{"Compilation Error: Undefined symbol"};// TODO
     }
 
 private:
