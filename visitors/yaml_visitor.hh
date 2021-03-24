@@ -42,7 +42,7 @@ public:
         YAML::Node result;
         result["kind"] = "class";
         result["name"] = declaration->ClassName();
-        declaration->Members().Accept(this);
+        declaration->Members()->Accept(this);
         result["members"] = Return_;
 
         SetReturn_(result);
@@ -299,7 +299,7 @@ public:
     }
 
     void Visit(struct TProgram* program) override {
-        program->ClassDeclarations().Accept(this);
+        program->ClassDeclarations()->Accept(this);
         Root_["Classes"] = Return_;
     }
 
@@ -357,19 +357,19 @@ public:
         SetReturn_(result);
     }
 
-    void Visit(struct TIntType* type) override {
+    void Visit(struct TIntTypeNode* type) override {
         ProcessType_("int", type);
     }
 
-    void Visit(struct TBooleanType* type) override {
+    void Visit(struct TBooleanTypeNode* type) override {
         ProcessType_("boolean", type);
     }
 
-    void Visit(struct TVoidType* type) override {
+    void Visit(struct TVoidTypeNode* type) override {
         ProcessType_("void", type);
     }
 
-    void Visit(struct TIdentifierType* type) override {
+    void Visit(struct TIdentifierTypeNode* type) override {
         YAML::Node result;
         result["kind"]       = "identifier type";
         result["identifier"] = type->Identifier();
@@ -433,7 +433,7 @@ private:
         SetReturn_(result);
     }
 
-    void ProcessType_(const std::string& prefix, TType* type) {
+    void ProcessType_(const std::string& prefix, TTypeNode* type) {
         YAML::Node result;
         result["kind"]     = prefix + " type";
         result["is-array"] = type->IsArray();

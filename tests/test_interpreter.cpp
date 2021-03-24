@@ -4,6 +4,7 @@
 
 #include "driver.hh"
 #include "naive_interpreter.hh"
+#include "template_visitor.hh"
 
 
 void RunInterpreter(std::ostream& out, const std::filesystem::path& file) {

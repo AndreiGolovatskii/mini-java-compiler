@@ -48,10 +48,10 @@ public:
     virtual void Visit(class TVariableDeclarationStatement*) = 0;
     virtual void Visit(class TWhileStatement*)               = 0;
     virtual void Visit(class TClassDeclarationList*)         = 0;
-    virtual void Visit(class TIntType*)                      = 0;
-    virtual void Visit(class TBooleanType*)                  = 0;
-    virtual void Visit(class TVoidType*)                     = 0;
-    virtual void Visit(class TIdentifierType*)               = 0;
+    virtual void Visit(class TIntTypeNode*)                  = 0;
+    virtual void Visit(class TBooleanTypeNode*)              = 0;
+    virtual void Visit(class TVoidTypeNode*)                 = 0;
+    virtual void Visit(class TIdentifierTypeNode*)           = 0;
     virtual void Visit(class TUnaryMinusExpression*)         = 0;
 };
 

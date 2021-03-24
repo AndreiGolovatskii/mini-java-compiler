@@ -32,8 +32,8 @@ public:
         return Extends_;
     }
 
-    TClassMemberDeclarationList& Members() {
-        return Members_;
+    TClassMemberDeclarationList* Members() {
+        return &Members_;
     }
 
 private:

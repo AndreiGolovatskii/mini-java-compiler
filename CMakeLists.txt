@@ -15,6 +15,8 @@ add_subdirectory(driver)
 add_subdirectory(ast_components)
 add_subdirectory(visitors)
 add_subdirectory(symbol_table)
+add_subdirectory(scope_table)
+add_subdirectory(types)
 
 
 add_library(
@@ -22,7 +24,7 @@ add_library(
         INTERFACE
 )
 
-target_link_libraries(Compiler INTERFACE Driver Visitors SymbolTable)
+target_link_libraries(Compiler INTERFACE Driver Visitors SymbolTable ScopeTable Types)
 
 add_executable(
         CompilerExe

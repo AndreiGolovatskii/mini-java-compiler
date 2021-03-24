@@ -112,10 +112,10 @@
 %nterm <TVariableList> formals
 %nterm <TVariableList> formals_prefix
 
-%nterm <TTypePtr> type
-%nterm <TTypePtr> simple_type
-%nterm <TTypePtr> array_type
-%nterm <TTypePtr> type_identifier
+%nterm <TTypeNodePtr> type
+%nterm <TTypeNodePtr> simple_type
+%nterm <TTypeNodePtr> array_type
+%nterm <TTypeNodePtr> type_identifier
 
 %nterm <TVariableDeclarationStatementPtr> local_variable_declaration
 
@@ -235,9 +235,9 @@ type:
 
 
 simple_type:
-    "int" {$$ = std::make_unique<TIntType>();}
-    | "boolean" {$$ = std::make_unique<TBooleanType>();}
-    | "void" {$$ = std::make_unique<TVoidType>();}
+    "int" {$$ = std::make_unique<TIntTypeNode>();}
+    | "boolean" {$$ = std::make_unique<TBooleanTypeNode>();}
+    | "void" {$$ = std::make_unique<TVoidTypeNode>();}
     | type_identifier {$$ = std::move($1);}
 
 
@@ -250,7 +250,7 @@ array_type:
 
 type_identifier:
     IDENTIFIER {
-        $$ = std::make_unique<TIdentifierType>(std::move($1));
+        $$ = std::make_unique<TIdentifierTypeNode>(std::move($1));
     }
 
 %nonassoc NO_ELSE;

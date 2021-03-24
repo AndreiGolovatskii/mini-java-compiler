@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-set(TEST_SOURCES test_main.cpp test_interpreter.cpp test_symbol_table.cpp)
+set(TEST_SOURCES test_main.cpp test_interpreter.cpp test_scopes.cpp test_symbol_table.cpp test_types.cpp test_symbol_table_builder.cpp)
 add_executable(Tests ${TEST_SOURCES})
 target_link_libraries(Tests Compiler)
 
