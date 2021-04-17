@@ -5,6 +5,14 @@
 
 class INode {
 public:
+    INode() = default;
+
+    INode(INode&& other) = default;
+    INode& operator=(INode&& other) = default;
+
+    INode(const INode& other) = delete;
+    INode& operator=(const INode& other) = delete;
+
     virtual void Accept(IVisitor* visitor) = 0;
     virtual ~INode()                       = default;
 };

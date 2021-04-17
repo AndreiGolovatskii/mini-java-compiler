@@ -29,7 +29,7 @@ private:
 
 class TMemberMethodDeclaration : public TClassMemberDeclaration {
 public:
-    explicit TMemberMethodDeclaration(TTypePtr&& returnType, TMethodSignature&& signature,
+    explicit TMemberMethodDeclaration(TTypeNodePtr&& returnType, TMethodSignature&& signature,
                                       TStatementListPtr&& statements)
         : ReturnType_(std::move(returnType)), Signature_(std::move(signature)), Statements_(std::move(statements)) {}
 
@@ -48,7 +48,7 @@ public:
         return Static_;
     }
 
-    [[nodiscard]] TType* ReturnType() const {
+    [[nodiscard]] TTypeNode* ReturnType() const {
         return ReturnType_.get();
     }
 
@@ -58,7 +58,7 @@ public:
 
 private:
     bool Static_ = false;
-    const TTypePtr ReturnType_;
+    const TTypeNodePtr ReturnType_;
     const TMethodSignature Signature_;
     const TStatementListPtr Statements_;
 };

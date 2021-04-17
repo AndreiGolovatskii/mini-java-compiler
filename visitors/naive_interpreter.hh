@@ -16,7 +16,7 @@ public:
     void Visit(struct TMemberVariableDeclaration* declaration) override {
         throw std::logic_error{"Unsupported"};
     }
-    void Visit(struct TIdentifierType* type) override {
+    void Visit(struct TIdentifierTypeNode* type) override {
         throw std::logic_error{"unsupported"};
     }
     void Visit(struct TMethodInvocation* invocation) override {
@@ -44,7 +44,7 @@ public:
         ReturnValue_ = expression->GetValue();
     }
     void Visit(struct TClassDeclaration* declaration) override {
-        declaration->Members().Accept(this);
+        declaration->Members()->Accept(this);
     }
     void Visit(struct TClassMemberDeclarationList* list) override {
         for (const auto& member : *list) {
@@ -93,11 +93,11 @@ public:
     void Visit(struct TLeqExpression* expression) override {
         BinaryExpression(expression, std::less_equal<>());
     }
-    void Visit(struct TVoidType* type) override {
+    void Visit(struct TVoidTypeNode* type) override {
         throw std::logic_error{"unsupported"};
     }
-    void Visit(struct TIntType* type) override {}
-    void Visit(struct TBooleanType* type) override {}
+    void Visit(struct TIntTypeNode* type) override {}
+    void Visit(struct TBooleanTypeNode* type) override {}
     void Visit(struct TThisExpression* expression) override {
         throw std::logic_error{"unsupported"};
     }
@@ -117,7 +117,7 @@ public:
         }
     }
     void Visit(struct TProgram* program) override {
-        program->ClassDeclarations().Accept(this);
+        program->ClassDeclarations()->Accept(this);
     }
     void Visit(struct TSubExpression* expression) override {
         BinaryExpression(expression, std::minus<>());
@@ -200,10 +200,6 @@ public:
 private:
     struct TReturnException : public std::exception {};
 
-    std::unordered_map<std::string, int> Variables_;
-    using lvalue = std::unordered_map<std::string, int>::iterator;
-    std::variant<int, lvalue> ReturnValue_;// store value or iterator to lvalue, so use GetReturnValue_ to use as rvalue
-
     int GetReturnValue_() {
         return std::visit(
                 [](auto&& arg) {
@@ -217,7 +213,6 @@ private:
                 ReturnValue_);
     }
 
-    std::ostream& Out_;
 
     void BinaryExpression(TBinaryExpression* expression, const std::function<int(int, int)>& fun) {
         expression->Lhs()->Accept(this);
@@ -226,6 +221,12 @@ private:
         int r2       = GetReturnValue_();
         ReturnValue_ = fun(r1, r2);
     }
+
+private:
+    std::unordered_map<std::string, int> Variables_;
+    using lvalue = std::unordered_map<std::string, int>::iterator;
+    std::variant<int, lvalue> ReturnValue_;
+    std::ostream& Out_;
 };
 
 #endif//COMPILER_NAIVE_INTERPRETER_HH

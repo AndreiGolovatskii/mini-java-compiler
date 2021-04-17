@@ -2,8 +2,11 @@
 #define COMPILER_TYPE_HH
 
 #include <memory>
+#include <string>
 
-class TType : public INode {
+#include "i_node.hh"
+
+class TTypeNode : public INode {
 public:
     void MakeArray() {
         IsArray_ = true;
@@ -18,10 +21,10 @@ private:
 };
 
 
-using TTypePtr = std::unique_ptr<TType>;
+using TTypeNodePtr = std::unique_ptr<TTypeNode>;
 
 
-class TVoidType : public TType {
+class TVoidTypeNode : public TTypeNode {
 public:
     void Accept(IVisitor* visitor) override {
         visitor->Visit(this);
@@ -29,10 +32,10 @@ public:
 };
 
 
-using TVoidTypePtr = std::unique_ptr<TVoidType>;
+using TVoidTypeNodePtr = std::unique_ptr<TVoidTypeNode>;
 
 
-class TIntType : public TType {
+class TIntTypeNode : public TTypeNode {
 public:
     void Accept(IVisitor* visitor) override {
         visitor->Visit(this);
@@ -40,10 +43,10 @@ public:
 };
 
 
-using TIntTypePtr = std::unique_ptr<TIntType>;
+using TIntTypeNodePtr = std::unique_ptr<TIntTypeNode>;
 
 
-class TBooleanType : public TType {
+class TBooleanTypeNode : public TTypeNode {
 public:
     void Accept(IVisitor* visitor) override {
         visitor->Visit(this);
@@ -51,12 +54,12 @@ public:
 };
 
 
-using TBooleanTypePtr = std::unique_ptr<TBooleanType>;
+using TBooleanTypeNodePtr = std::unique_ptr<TBooleanTypeNode>;
 
 
-class TIdentifierType : public TType {
+class TIdentifierTypeNode : public TTypeNode {
 public:
-    explicit TIdentifierType(std::string&& identifier) : Identifier_(std::move(identifier)) {}
+    explicit TIdentifierTypeNode(std::string&& identifier) : Identifier_(std::move(identifier)) {}
     void Accept(IVisitor* visitor) override {
         visitor->Visit(this);
     }
@@ -70,6 +73,6 @@ private:
 };
 
 
-using TIdentifierTypePtr = std::unique_ptr<TIdentifierType>;
+using TIdentifierTypeNodePtr = std::unique_ptr<TIdentifierTypeNode>;
 
 #endif//COMPILER_TYPE_HH

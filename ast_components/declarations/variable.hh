@@ -2,14 +2,16 @@
 #define COMPILER_VARIABLE_HH
 
 #include <string>
+#include <vector>
+#include <memory>
 
 #include "types/type.hh"
 
 class TVariable {
 public:
-    explicit TVariable(TTypePtr&& type, std::string&& name) : Type_(std::move(type)), Name_(std::move(name)) {}
+    explicit TVariable(TTypeNodePtr&& type, std::string&& name) : Type_(std::move(type)), Name_(std::move(name)) {}
 
-    TType* Type() const {
+    TTypeNode* Type() const {
         return Type_.get();
     }
 
@@ -18,7 +20,7 @@ public:
     }
 
 private:
-    TTypePtr Type_;
+    TTypeNodePtr Type_;
     std::string Name_;
 };
 

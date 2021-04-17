@@ -47,9 +47,9 @@ class TVariableDeclarationStatement;
 class TWhileStatement;
 class TClassDeclarationList;
 
-class TIntType;
+class TIntTypeNode;
 class TBooleanExpression;
-class TVoidType;
-class TIdentifierType;
+class TVoidTypeNode;
+class TIdentifierTypeNode;
 
 #endif//COMPILER_AST_FORWARD_DECLARATION_HH

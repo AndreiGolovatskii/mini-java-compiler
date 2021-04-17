@@ -12,8 +12,8 @@ public:
         visitor->Visit(this);
     }
 
-    TClassDeclarationList& ClassDeclarations() {
-        return ClassDeclarations_;
+    TClassDeclarationList* ClassDeclarations() {
+        return &ClassDeclarations_;
     }
 
 private:

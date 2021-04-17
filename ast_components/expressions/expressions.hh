@@ -88,17 +88,17 @@ using TLengthExpressionPtr = std::unique_ptr<TLengthExpression>;
 
 class TNewExpression : public TExpression {
 public:
-    explicit TNewExpression(TTypePtr&& type) : Type_(std::move(type)) {}
+    explicit TNewExpression(TTypeNodePtr&& type) : Type_(std::move(type)) {}
     void Accept(IVisitor* visitor) override {
         visitor->Visit(this);
     }
 
-    TType* Type() const {
+    TTypeNode* Type() const {
         return Type_.get();
     }
 
 private:
-    TTypePtr Type_;
+    TTypeNodePtr Type_;
 };
 
 
@@ -107,13 +107,13 @@ using TNewExpressionPtr = std::unique_ptr<TNewExpression>;
 
 class TNewArrayExpression : public TExpression {
 public:
-    explicit TNewArrayExpression(TTypePtr&& type, TExpressionPtr&& size)
+    explicit TNewArrayExpression(TTypeNodePtr&& type, TExpressionPtr&& size)
         : Type_(std::move(type)), Size_(std::move(size)) {}
     void Accept(IVisitor* visitor) override {
         visitor->Visit(this);
     }
 
-    TType* Type() const {
+    TTypeNode* Type() const {
         return Type_.get();
     }
 
@@ -122,7 +122,7 @@ public:
     }
 
 private:
-    TTypePtr Type_;
+    TTypeNodePtr Type_;
     TExpressionPtr Size_;
 };
 
@@ -168,8 +168,9 @@ private:
 using TIntExpressionPtr = std::unique_ptr<TIntExpression>;
 
 
-class TThisExpression : public TExpression {
+class TThisExpression : public TIdentifierExpression {
 public:
+    TThisExpression() : TIdentifierExpression("this") {}
     void Accept(IVisitor* visitor) override {
         visitor->Visit(this);
     }
