@@ -29,6 +29,8 @@
 id    [a-zA-Z][a-zA-Z_0-9]*
 int   [-+0-9][0-9]*
 blank [ \t\r]
+%x LARGE_COMMENT
+%x LINE_COMMENT
 
 %{
   // Code run each time a pattern is matched.
@@ -44,6 +46,16 @@ blank [ \t\r]
 
 {blank}+   loc.step ();
 \n+        loc.lines (yyleng); loc.step ();
+
+
+"/*"                  { BEGIN(LARGE_COMMENT); }
+<LARGE_COMMENT>"*/"   { BEGIN(INITIAL); }
+<LARGE_COMMENT>\n+    loc.lines (yyleng); loc.step ();
+
+"//"                  { BEGIN(LINE_COMMENT); }
+<LINE_COMMENT>\n      { loc.lines(yyleng); loc.step(); BEGIN(INITIAL); }
+
+
 
 "-"        return yy::parser::make_MINUS   (loc);
 "+"        return yy::parser::make_PLUS    (loc);

@@ -6,7 +6,7 @@
 #include "yaml_visitor.hh"
 
 
-class TCompilerTest : public testing::TestWithParam<std::filesystem::path> {
+class PrintVisitorTest : public testing::TestWithParam<std::filesystem::path> {
 protected:
     static void TestParse(const std::filesystem::path& src) {
         TDriver driver;
@@ -32,7 +32,7 @@ protected:
 };
 
 
-TEST_P(TCompilerTest, ParseTest) {
+TEST_P(PrintVisitorTest, ParseTest) {
     TestParse(GetParam());
 }
 
@@ -49,4 +49,4 @@ std::vector<std::filesystem::path> FilesToTest(const std::vector<std::string>& t
     return res;
 }
 
-INSTANTIATE_TEST_SUITE_P(ParseTest, TCompilerTest, ::testing::ValuesIn(FilesToTest({"parse_tests"})));
+INSTANTIATE_TEST_SUITE_P(ParseTest, PrintVisitorTest, ::testing::ValuesIn(FilesToTest({"print_visitor_tests"})));
