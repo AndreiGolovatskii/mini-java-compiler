@@ -33,7 +33,7 @@ private:
     bool status_;
 };
 
-void JitRun(std::unique_ptr<llvm::Module> module, llvm::Function* entry) {
+inline void JitRun(std::unique_ptr<llvm::Module> module, llvm::Function* entry) {
     llvm::InitializeNativeTarget();
     llvm::InitializeNativeTargetAsmPrinter();
     llvm::InitializeNativeTargetAsmParser();
@@ -49,7 +49,7 @@ void JitRun(std::unique_ptr<llvm::Module> module, llvm::Function* entry) {
     llvm::GenericValue GV = EE->runFunction(entry, {});
 }
 
-Status JitRunSubprocess(std::unique_ptr<llvm::Module> module, llvm::Function* entry, int timeout = 1) {
+inline Status JitRunSubprocess(std::unique_ptr<llvm::Module> module, llvm::Function* entry, int timeout = 1) {
     pid_t childPid = fork();
     if (!childPid) {
         alarm(timeout);

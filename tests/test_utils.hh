@@ -1,7 +1,7 @@
 #pragma once
 
-#include "filesystem"
-#include "vector"
+#include <filesystem>
+#include <vector>
 
 
 inline std::vector<std::filesystem::path> FilesToTest(const std::vector<std::string>& testDirs,

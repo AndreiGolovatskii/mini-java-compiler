@@ -1,10 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
 
-#Required Env's, example:
-#set(ENV{CMAKE_INCLUDE_PATH} "/usr/local/opt/flex/include:ENV{CMAKE_INCLUDE_PATH}")
-#set(ENV{CMAKE_LIBRARY_PATH} "/usr/local/opt/flex/lib;/usr/local/opt/bison/lib:ENV{CMAKE_LIBRARY_PATH}")
-#set(ENV{PATH} "/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:ENV{PATH}")
-#set(ENV{LLVM_DIR} "/usr/local/Cellar/llvm/12.0.0/lib/cmake")
 
 find_package(BISON 3.5 REQUIRED)
 BISON_TARGET(

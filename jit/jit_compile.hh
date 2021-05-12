@@ -27,7 +27,7 @@ JitCompile(const std::filesystem::path& path) {
     return {std::move(module), std::move(context)};
 }
 
-llvm::Function* GetEntry(llvm::Module* module) {
+inline llvm::Function* GetEntry(llvm::Module* module) {
     std::optional<llvm::Function*> entry;
     for (auto& func : module->getFunctionList()) {
         if (func.hasName() && func.getName().endswith("#main")) {
