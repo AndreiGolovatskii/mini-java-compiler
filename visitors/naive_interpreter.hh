@@ -14,7 +14,7 @@ class TNaiveInterpreter : public IVisitor {
 public:
     explicit TNaiveInterpreter(std::ostream& out) : Out_(out), ReturnValue_(-1) {}
     void Visit(struct TMemberVariableDeclaration* declaration) override {
-        throw std::logic_error{"Unsupported"};
+        throw std::logic_error{"unsupported"};
     }
     void Visit(struct TIdentifierTypeNode* type) override {
         throw std::logic_error{"unsupported"};
@@ -57,6 +57,9 @@ public:
     void Visit(struct TEqExpression* expression) override {
         BinaryExpression(expression, std::equal_to<>());
     }
+    void Visit(struct TNEqExpression* expression) override {
+        BinaryExpression(expression, std::not_equal_to<>());
+    }
     void Visit(struct TExpressionList* list) override {
         for (const auto& expression : *list) {
             expression->Accept(this);
@@ -66,9 +69,6 @@ public:
         throw std::logic_error{"unsupported"};
     }
     void Visit(struct TFieldInvocationExpression* expression) override {
-        throw std::logic_error{"unsupported"};
-    }
-    void Visit(struct TFieldInvocationIndexed* indexed) override {
         throw std::logic_error{"unsupported"};
     }
     void Visit(struct TGeExpression* expression) override {
@@ -97,6 +97,7 @@ public:
         throw std::logic_error{"unsupported"};
     }
     void Visit(struct TIntTypeNode* type) override {}
+    void Visit(struct TArrayTypeNode* node) override {}
     void Visit(struct TBooleanTypeNode* type) override {}
     void Visit(struct TThisExpression* expression) override {
         throw std::logic_error{"unsupported"};
@@ -150,11 +151,7 @@ public:
     }
     void Visit(struct TVariableDeclarationStatement* statement) override {
         const std::string& name = statement->Variable().Name();
-        if (statement->Variable().Type()->IsArray()) {
-            throw std::logic_error{"unsupported"};
-        } else {
-            Variables_[name] = 0;
-        }
+        Variables_[name]        = 0;
     }
     void Visit(struct TMethodInvocationStatement* statement) override {
         throw std::logic_error{"unsupported"};

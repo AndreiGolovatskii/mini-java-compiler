@@ -8,43 +8,39 @@
 #include "types.hh"
 
 
+template<class T>
 class TScope {
 public:
     explicit TScope(std::string debugName = "") : debugName(std::move(debugName)) {}
 
-    void AddVariable(const std::string& name, std::unique_ptr<IType>&& type) {
+    template<class... Args>
+    void AddVariable(const std::string& name, Args&&... args) {
         if (Variable_.contains(name)) {
             throw std::logic_error{"Compilation Error: Variable redefinition"};
         }
-        Variable_[name] = std::make_unique<TVariableSpecification>(std::move(type), false);
+        Variable_.emplace(std::pair<const std::string, T>(name, T{std::forward<Args>(args)...}));
     }
 
-    [[nodiscard]] TVariableSpecification* TryVariable(const std::string& name) const {
-        if (Variable_.contains(name)) {
-            return Variable_.at(name).get();
-        }
-        return nullptr;
+    [[nodiscard]] bool HasVariable(const std::string& name) const {
+        return Variable_.contains(name);
     }
 
-    [[nodiscard]] TVariableSpecification* Variable(const std::string& name) const {
-        auto* res = TryVariable(name);
-        if (res) {
-            return res;
-        }
-        throw std::logic_error{"Compilation Error: Variable used without declaration"};
+    [[nodiscard]] const T& Variable(const std::string& name) const {
+        return Variable_.at(name);
     }
 
 public:
-    const std::string debugName;
+    std::string debugName;
 
 private:
-    std::unordered_map<std::string, std::unique_ptr<TVariableSpecification>> Variable_;
+    std::unordered_map<std::string, T> Variable_;
 };
 
 
-class TScopeTreeNode : public TScope {
+template<class T>
+class TScopeTreeNode : public TScope<T> {
 public:
-    TScopeTreeNode(std::string debugName, TScopeTreeNode* parent) : TScope(std::move(debugName)), Parent_(parent) {}
+    TScopeTreeNode(const std::string& debugName, TScopeTreeNode* parent) : TScope<T>(debugName), Parent_(parent) {}
 
     TScopeTreeNode* Parent() {
         return Parent_;

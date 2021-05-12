@@ -60,6 +60,10 @@ public:
         ProcessBinaryExpression_("eq", expression);
     }
 
+    void Visit(struct TNEqExpression* expression) override {
+        ProcessBinaryExpression_("neq", expression);
+    }
+
     void Visit(struct TExpressionList* list) override {
         ProcessList_(list);
     }
@@ -75,17 +79,8 @@ public:
     void Visit(struct TFieldInvocationExpression* expression) override {
         YAML::Node result;
         result["kind"] = "field invocation expression";
-        expression->Method()->Accept(this);
+        expression->Invocation()->Accept(this);
         result["invocation"] = Return_;
-
-        SetReturn_(result);
-    }
-
-    void Visit(struct TFieldInvocationIndexed* invocationIndexed) override {
-        YAML::Node result;
-        result["kind"] = "field invocation indexed";
-        invocationIndexed->Index()->Accept(this);
-        result["index"] = Return_;
 
         SetReturn_(result);
     }
@@ -361,6 +356,15 @@ public:
         ProcessType_("int", type);
     }
 
+    void Visit(struct TArrayTypeNode* node) override {
+        YAML::Node result;
+        result["kind"] = "array type";
+        node->Type()->Accept(this);
+        result["inner type"] = Return_;
+
+        SetReturn_(result);
+    }
+
     void Visit(struct TBooleanTypeNode* type) override {
         ProcessType_("boolean", type);
     }
@@ -373,7 +377,6 @@ public:
         YAML::Node result;
         result["kind"]       = "identifier type";
         result["identifier"] = type->Identifier();
-        result["is-array"]   = type->IsArray();
 
         SetReturn_(result);
     }
@@ -435,8 +438,7 @@ private:
 
     void ProcessType_(const std::string& prefix, TTypeNode* type) {
         YAML::Node result;
-        result["kind"]     = prefix + " type";
-        result["is-array"] = type->IsArray();
+        result["kind"] = prefix + " type";
 
         SetReturn_(result);
     }

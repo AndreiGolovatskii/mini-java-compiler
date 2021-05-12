@@ -7,13 +7,11 @@ Classes:
         name: main
         return-type:
           kind: void type
-          is-array: false
         arguments: ~
         statements:
           - kind: variable declaration statement
             variable-type:
               kind: int type
-              is-array: false
             variable-name: x
           - kind: assignment statement
             expression:

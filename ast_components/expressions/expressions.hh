@@ -34,7 +34,7 @@ public:
         visitor->Visit(this);
     }
 
-    TExpression* Expression() const {
+    [[nodiscard]] TExpression* Expression() const {
         return Expression_.get();
     }
 
@@ -54,11 +54,11 @@ public:
         visitor->Visit(this);
     }
 
-    TExpression* Expression() const {
+    [[nodiscard]] TExpression* Expression() const {
         return Expression_.get();
     }
 
-    TExpression* Index() const {
+    [[nodiscard]] TExpression* Index() const {
         return Index_.get();
     }
 
@@ -93,7 +93,7 @@ public:
         visitor->Visit(this);
     }
 
-    TTypeNode* Type() const {
+    [[nodiscard]] TTypeNode* Type() const {
         return Type_.get();
     }
 
@@ -109,15 +109,16 @@ class TNewArrayExpression : public TExpression {
 public:
     explicit TNewArrayExpression(TTypeNodePtr&& type, TExpressionPtr&& size)
         : Type_(std::move(type)), Size_(std::move(size)) {}
+
     void Accept(IVisitor* visitor) override {
         visitor->Visit(this);
     }
 
-    TTypeNode* Type() const {
+    [[nodiscard]] TTypeNode* Type() const {
         return Type_.get();
     }
 
-    TExpression* Size() const {
+    [[nodiscard]] TExpression* Size() const {
         return Size_.get();
     }
 
@@ -137,7 +138,7 @@ public:
         visitor->Visit(this);
     }
 
-    const std::string& Identifier() const {
+    [[nodiscard]] const std::string& Identifier() const {
         return Identifier_;
     }
 
@@ -153,7 +154,7 @@ class TIntExpression : public TExpression {
 public:
     explicit TIntExpression(int value) : Value_(value) {}
 
-    int GetValue() const {
+    [[nodiscard]] int GetValue() const {
         return Value_;
     }
     void Accept(IVisitor* visitor) override {
@@ -184,9 +185,10 @@ class TBooleanExpression : public TExpression {
 public:
     explicit TBooleanExpression(bool value) : Value_(value) {}
 
-    bool GetValue() const {
+    [[nodiscard]] bool GetValue() const {
         return Value_;
     }
+
     void Accept(IVisitor* visitor) override {
         visitor->Visit(this);
     }
@@ -219,17 +221,17 @@ using TMethodInvocationExpressionPtr = std::unique_ptr<TMethodInvocationExpressi
 
 class TFieldInvocationExpression : public TExpression {
 public:
-    explicit TFieldInvocationExpression(TFieldInvocationPtr&& method) : Method_(std::move(method)) {}
+    explicit TFieldInvocationExpression(TFieldInvocationPtr&& field) : Invocation_(std::move(field)) {}
     void Accept(IVisitor* visitor) override {
         visitor->Visit(this);
     }
 
-    TFieldInvocation* Method() {
-        return Method_.get();
+    TFieldInvocation* Invocation() {
+        return Invocation_.get();
     }
 
 private:
-    TFieldInvocationPtr Method_;
+    TFieldInvocationPtr Invocation_;
 };
 
 using TMethodInvocationExpressionPtr = std::unique_ptr<TMethodInvocationExpression>;

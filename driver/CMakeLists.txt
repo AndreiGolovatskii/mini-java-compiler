@@ -1,12 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
 
-if (${APPLE})
-    set(ENV{CMAKE_INCLUDE_PATH} "/usr/local/opt/flex/include:ENV{CMAKE_INCLUDE_PATH}")
-    set(ENV{CMAKE_LIBRARY_PATH} "/usr/local/opt/flex/lib;/usr/local/opt/bison/lib:ENV{CMAKE_LIBRARY_PATH}")
-    set(ENV{PATH} "/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:ENV{PATH}")
-endif ()
-
 find_package(BISON 3.5 REQUIRED)
 BISON_TARGET(
         Parser

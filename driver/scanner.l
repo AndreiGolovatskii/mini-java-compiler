@@ -29,6 +29,8 @@
 id    [a-zA-Z][a-zA-Z_0-9]*
 int   [-+0-9][0-9]*
 blank [ \t\r]
+%x LARGE_COMMENT
+%x LINE_COMMENT
 
 %{
   // Code run each time a pattern is matched.
@@ -45,6 +47,21 @@ blank [ \t\r]
 {blank}+   loc.step ();
 \n+        loc.lines (yyleng); loc.step ();
 
+
+"/*"                  { BEGIN(LARGE_COMMENT); }
+<LARGE_COMMENT>"*/"   { BEGIN(INITIAL); }
+<LARGE_COMMENT>\n+    { loc.lines(yyleng); loc.step(); }
+<LARGE_COMMENT>.      { loc.step(); }
+"//"                  { BEGIN(LINE_COMMENT); }
+<LINE_COMMENT>\n      { loc.lines(yyleng); loc.step(); BEGIN(INITIAL); }
+<LINE_COMMENT>.       { loc.step(); }
+
+
+
+"<="       return yy::parser::make_LE(loc);
+">="       return yy::parser::make_GE(loc);
+"=="       return yy::parser::make_EQ(loc);
+"!="       return yy::parser::make_NEQ(loc);
 "-"        return yy::parser::make_MINUS   (loc);
 "+"        return yy::parser::make_PLUS    (loc);
 "*"        return yy::parser::make_STAR    (loc);
@@ -52,6 +69,7 @@ blank [ \t\r]
 "%"        return yy::parser::make_PERCENT (loc);
 "&&"       return yy::parser::make_AND     (loc);
 "||"       return yy::parser::make_OR      (loc);
+"!"        return yy::parser::make_NOT     (loc);
 "("        return yy::parser::make_LPAREN  (loc);
 ")"        return yy::parser::make_RPAREN  (loc);
 "{"        return yy::parser::make_LEFTSCOPE(loc);
@@ -59,16 +77,13 @@ blank [ \t\r]
 "[]"       return yy::parser::make_DOUBLEBRACKET(loc);
 "["        return yy::parser::make_LBRACKET(loc);
 "]"        return yy::parser::make_RBRACKET(loc);
-"="        return yy::parser::make_ASSIGN (loc);
 "::"       return yy::parser::make_DOUBLE_COLON(loc);
 ","        return yy::parser::make_COMMA(loc);
 "'"        return yy::parser::make_QUOTE(loc);
 "\""       return yy::parser::make_QUOTE(loc);
-">"        return yy::parser::make_GT(loc);
 "<"        return yy::parser::make_LT(loc);
-">="       return yy::parser::make_GE(loc);
-"<="       return yy::parser::make_LE(loc);
-"=="       return yy::parser::make_EQ(loc);
+">"        return yy::parser::make_GT(loc);
+"="        return yy::parser::make_ASSIGN (loc);
 "."        return yy::parser::make_DOT(loc);
 ";"        return yy::parser::make_SEMICOLON(loc);
 

@@ -10,6 +10,7 @@ class TClassDeclaration;
 class TClassMemberDeclarationList;
 class TDivExpression;
 class TEqExpression;
+class TNEqExpression;
 class TExpressionList;
 class TFieldInvocation;
 class TFieldInvocationExpression;
@@ -31,7 +32,6 @@ class TMethodInvocationExpression;
 class TMethodInvocationStatement;
 class TModExpression;
 class TMulExpression;
-class TNewArrayExpression;
 class TNewExpression;
 class TNotExpression;
 class TOrExpression;
@@ -51,5 +51,6 @@ class TIntTypeNode;
 class TBooleanExpression;
 class TVoidTypeNode;
 class TIdentifierTypeNode;
+class TArrayTypeNode;
 
 #endif//COMPILER_AST_FORWARD_DECLARATION_HH

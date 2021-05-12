@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <string>
+#include <utility>
 
 #include "expressions/expression_base.hh"
 #include "i_node.hh"
@@ -39,9 +40,15 @@ using TMethodInvocationPtr = std::unique_ptr<TMethodInvocation>;
 
 class TFieldInvocation : public INode {
 public:
-    explicit TFieldInvocation(std::string&& identifier) : Identifier_(identifier) {}
+    explicit TFieldInvocation(TExpressionPtr&& expression, std::string identifier)
+        : Expression_(std::move(expression)), Identifier_(std::move(identifier)) {}
+
     void Accept(IVisitor* visitor) override {
         visitor->Visit(this);
+    }
+
+    [[nodiscard]] TExpression* Expression() const {
+        return Expression_.get();
     }
 
     [[nodiscard]] const std::string& Identifier() const {
@@ -49,6 +56,7 @@ public:
     }
 
 private:
+    TExpressionPtr Expression_;
     std::string Identifier_;
 };
 
@@ -56,6 +64,7 @@ private:
 using TFieldInvocationPtr = std::unique_ptr<TFieldInvocation>;
 
 
+/*
 class TFieldInvocationIndexed : public TFieldInvocation {
 public:
     explicit TFieldInvocationIndexed(std::string&& identifier, TExpressionPtr&& index)
@@ -74,5 +83,6 @@ private:
 
 
 using TFieldInvocationIndexedPtr = std::unique_ptr<TFieldInvocationIndexed>;
+ */
 
 #endif//COMPILER_INVOCATION_HH
