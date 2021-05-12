@@ -2,13 +2,25 @@
 
 #include <deque>
 #include <string>
+#include <utility>
 
 #include "ast_components.hh"
 #include "i_type.hh"
 #include "scope.hh"
 
+template<class T = std::unique_ptr<TVariableSpecification>>
 class TScopeTable {
 public:
+    TScopeTable() = default;
+
+    TScopeTable(const TScopeTable<T>& other) = delete;
+    TScopeTable(TScopeTable<T>&& other)      = delete;
+
+
+    TScopeTable<T> operator=(const TScopeTable<T>& other) = delete;
+    TScopeTable<T> operator=(TScopeTable<T>&& other) = delete;
+
+
     void BeginScope(const std::string& name = "") {
         AllScopes_.emplace_back(name, Current_);
         Current_ = &AllScopes_.back();
@@ -18,16 +30,27 @@ public:
         Current_ = Current_->Parent();
     }
 
-    void AddVariable(const std::string& name, std::unique_ptr<IType>&& type) {
-        Current_->AddVariable(name, std::move(type));
+    template<class... Args>
+    void AddVariable(const std::string& name, Args&&... args) {
+        Current_->AddVariable(name, std::forward<Args>(args)...);
     }
 
-    [[nodiscard]] TVariableSpecification* Variable(const std::string& name) const {
-        TScopeTreeNode* findIn = Current_;
+    [[nodiscard]] bool HasVariable(const std::string& name) const {
+        auto* findIn = Current_;
         while (findIn) {
-            auto* variable = findIn->TryVariable(name);
-            if (variable) {
-                return variable;
+            if (findIn->HasVariable(name)) {
+                return true;
+            }
+            findIn = findIn->Parent();
+        }
+        return false;
+    }
+
+    [[nodiscard]] const T& Variable(const std::string& name) const {
+        auto* findIn = Current_;
+        while (findIn) {
+            if (findIn->HasVariable(name)) {
+                return findIn->Variable(name);
             }
             findIn = findIn->Parent();
         }
@@ -35,6 +58,6 @@ public:
     }
 
 private:
-    TScopeTreeNode* Current_{nullptr};
-    std::deque<TScopeTreeNode> AllScopes_;
+    TScopeTreeNode<T>* Current_{nullptr};
+    std::deque<TScopeTreeNode<T>> AllScopes_;
 };

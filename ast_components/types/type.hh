@@ -6,19 +6,7 @@
 
 #include "i_node.hh"
 
-class TTypeNode : public INode {
-public:
-    void MakeArray() {
-        IsArray_ = true;
-    }
-
-    [[nodiscard]] bool IsArray() const {
-        return IsArray_;
-    }
-
-private:
-    bool IsArray_ = false;
-};
+class TTypeNode : public INode {};
 
 
 using TTypeNodePtr = std::unique_ptr<TTypeNode>;
@@ -74,5 +62,22 @@ private:
 
 
 using TIdentifierTypeNodePtr = std::unique_ptr<TIdentifierTypeNode>;
+
+
+class TArrayTypeNode : public TTypeNode {
+public:
+    explicit TArrayTypeNode(TTypeNodePtr&& type) : Type_(std::move(type)) {}
+
+    void Accept(IVisitor* visitor) override {
+        visitor->Visit(this);
+    }
+
+    [[nodiscard]] TTypeNode* Type() const {
+        return Type_.get();
+    }
+
+private:
+    TTypeNodePtr Type_;
+};
 
 #endif//COMPILER_TYPE_HH

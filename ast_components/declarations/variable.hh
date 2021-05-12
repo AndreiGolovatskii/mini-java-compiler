@@ -1,9 +1,9 @@
 #ifndef COMPILER_VARIABLE_HH
 #define COMPILER_VARIABLE_HH
 
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
 
 #include "types/type.hh"
 

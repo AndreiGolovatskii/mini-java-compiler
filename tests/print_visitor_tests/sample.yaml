@@ -7,7 +7,6 @@ Classes:
         name: main
         return-type:
           kind: void type
-          is-array: false
         arguments: ~
         statements:
           - kind: print statement
@@ -21,7 +20,6 @@ Classes:
                   value-type:
                     kind: identifier type
                     identifier: Fac
-                    is-array: false
                 arguments:
                   - kind: int expression
                     value: 10
@@ -33,12 +31,10 @@ Classes:
         name: ComputeFac
         return-type:
           kind: int type
-          is-array: false
         arguments:
           - name: num
             type:
               kind: int type
-              is-array: false
         statements:
           - kind: assert statement
             expresion:
@@ -52,7 +48,6 @@ Classes:
           - kind: variable declaration statement
             variable-type:
               kind: int type
-              is-array: false
             variable-name: num_aux
           - kind: if-else statement
             condition:

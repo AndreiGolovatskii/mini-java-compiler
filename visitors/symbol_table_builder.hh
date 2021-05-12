@@ -11,7 +11,7 @@ class TSymbolTableBuilder : public TTemplateVisitor<std::unique_ptr<IType>> {
 public:
     void Visit(TMemberVariableDeclaration* declaration) override {
         auto type = Accept(declaration->Variable().Type());
-        Table_.Class(CurrentClass_)->AddVariable(declaration->Variable().Name(), std::move(type));
+        Table_.Get(CurrentClass_)->AddVariable(declaration->Variable().Name(), std::move(type));
     }
     void Visit(TMemberMethodDeclaration* declaration) override {
         std::vector<TArgument> args;
@@ -20,26 +20,25 @@ public:
                           args.emplace_back(arg.Name(), Accept(arg.Type()));
                       });
 
-        Table_.Class(CurrentClass_)
+        Table_.Get(CurrentClass_)
                 ->AddMethod(declaration->Signature().Name(),
                             std::make_unique<TMethodSpecification>(Accept(declaration->ReturnType()), std::move(args),
                                                                    declaration->IsStatic()));
     }
     void Visit(TIntTypeNode* type) override {
-        assert(!type->IsArray());
         Return(std::make_unique<TIntegerType>());
     }
     void Visit(TBooleanTypeNode* type) override {
-        assert(!type->IsArray());
         Return(std::make_unique<TBooleanType>());
     }
     void Visit(TVoidTypeNode* type) override {
-        assert(!type->IsArray());
         Return(std::make_unique<TVoidType>());
     }
     void Visit(TIdentifierTypeNode* type) override {
-        assert(!type->IsArray());
-        Return(std::make_unique<TClassPtrType>(Table_.Class(type->Identifier())));
+        Return(std::make_unique<TClassPtrType>(Table_.Get(type->Identifier()).get()));
+    }
+    void Visit(TArrayTypeNode* node) override {
+        Return(std::make_unique<TArrayType>());
     }
     void Visit(TClassMemberDeclarationList* list) override {
         std::for_each(list->begin(), list->end(), [this](const auto& it) {
@@ -52,7 +51,7 @@ public:
     }
     void Visit(TClassDeclarationList* list) override {
         std::for_each(list->begin(), list->end(), [this](const auto& it) {
-            Table_.AddClass(it->ClassName());
+            Table_.Add(it->ClassName(), std::make_unique<TClassSpecification>());
         });
         std::for_each(list->begin(), list->end(), [this](const auto& it) {
             it->Accept(this);
@@ -62,11 +61,11 @@ public:
         Accept(program->ClassDeclarations());
     }
 
-    TSymbolTable& SymbolTable() {
+    TSymbolTable<>& SymbolTable() {
         return Table_;
     }
 
 private:
-    TSymbolTable Table_;
+    TSymbolTable<> Table_;
     std::string CurrentClass_;
 };

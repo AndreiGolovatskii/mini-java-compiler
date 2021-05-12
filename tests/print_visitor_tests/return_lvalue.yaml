@@ -5,26 +5,24 @@ Classes:
       - kind: member variable declaration
         name: Member
         variable-type:
-          kind: int type
-          is-array: true
+          kind: array type
+          inner type:
+            kind: int type
       - kind: method
         is-static: false
         name: Init
         return-type:
           kind: void type
-          is-array: false
         arguments:
           - name: cnt
             type:
               kind: int type
-              is-array: false
         statements:
           - kind: assignment statement
             expression:
               kind: new array expression
               value-type:
                 kind: int type
-                is-array: false
               size:
                 kind: identifier expression
                 identifier: cnt
@@ -35,8 +33,9 @@ Classes:
         is-static: false
         name: GetMember
         return-type:
-          kind: int type
-          is-array: true
+          kind: array type
+          inner type:
+            kind: int type
         arguments: ~
         statements:
           - kind: return statement
@@ -47,8 +46,9 @@ Classes:
         is-static: false
         name: GetMemberToo
         return-type:
-          kind: int type
-          is-array: true
+          kind: array type
+          inner type:
+            kind: int type
         arguments: ~
         statements:
           - kind: return statement
@@ -57,6 +57,24 @@ Classes:
               invocation:
                 kind: field invocation
                 identifier: Member
+      - kind: method
+        is-static: false
+        name: GetMemberTooToo
+        return-type:
+          kind: array type
+          inner type:
+            kind: int type
+        arguments: ~
+        statements:
+          - kind: return statement
+            expression:
+              kind: method invocation expression
+              invocation:
+                kind: method invocation
+                method: GetMember
+                expression:
+                  kind: this expression
+                arguments: ~
   - kind: class
     name: Main
     members:
@@ -65,14 +83,12 @@ Classes:
         name: main
         return-type:
           kind: void type
-          is-array: false
         arguments: ~
         statements:
           - kind: variable declaration statement
             variable-type:
               kind: identifier type
               identifier: Proxy
-              is-array: false
             variable-name: proxy
           - statement: method invocation statement
             invocation:
@@ -125,3 +141,11 @@ Classes:
               index:
                 kind: int expression
                 value: 4
+          - statement: method invocation statement
+            invocation:
+              kind: method invocation
+              method: GetMemberTooToo
+              expression:
+                kind: identifier expression
+                identifier: proxy
+              arguments: ~

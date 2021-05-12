@@ -5,6 +5,8 @@
 #include "driver.hh"
 #include "yaml_visitor.hh"
 
+#include "test_utils.hh"
+
 
 class PrintVisitorTest : public testing::TestWithParam<std::filesystem::path> {
 protected:
@@ -37,16 +39,5 @@ TEST_P(PrintVisitorTest, ParseTest) {
 }
 
 
-std::vector<std::filesystem::path> FilesToTest(const std::vector<std::string>& testDirs) {
-    std::vector<std::filesystem::path> res;
-    for (const auto& testDir : testDirs) {
-        for (const auto& file : std::filesystem::directory_iterator(testDir)) {
-            if (file.is_regular_file() && file.path().extension() == ".java") {
-                res.push_back(file.path());
-            }
-        }
-    }
-    return res;
-}
-
-INSTANTIATE_TEST_SUITE_P(ParseTest, PrintVisitorTest, ::testing::ValuesIn(FilesToTest({"print_visitor_tests"})));
+INSTANTIATE_TEST_SUITE_P(ParseTest, PrintVisitorTest,
+                         ::testing::ValuesIn(FilesToTest({"print_visitor_tests"})));

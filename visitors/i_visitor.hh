@@ -13,10 +13,10 @@ public:
     virtual void Visit(class TClassMemberDeclarationList*)   = 0;
     virtual void Visit(class TDivExpression*)                = 0;
     virtual void Visit(class TEqExpression*)                 = 0;
+    virtual void Visit(class TNEqExpression*)                = 0;
     virtual void Visit(class TExpressionList*)               = 0;
     virtual void Visit(class TFieldInvocation*)              = 0;
     virtual void Visit(class TFieldInvocationExpression*)    = 0;
-    virtual void Visit(class TFieldInvocationIndexed*)       = 0;
     virtual void Visit(class TGeExpression*)                 = 0;
     virtual void Visit(class TGeqExpression*)                = 0;
     virtual void Visit(class TIdentifierExpression*)         = 0;
@@ -52,7 +52,10 @@ public:
     virtual void Visit(class TBooleanTypeNode*)              = 0;
     virtual void Visit(class TVoidTypeNode*)                 = 0;
     virtual void Visit(class TIdentifierTypeNode*)           = 0;
+    virtual void Visit(class TArrayTypeNode*)                = 0;
     virtual void Visit(class TUnaryMinusExpression*)         = 0;
+
+    virtual ~IVisitor() = default;
 };
 
 #endif//COMPILER_I_VISITOR_HH

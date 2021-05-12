@@ -120,6 +120,7 @@ class TEqExpression : public TBinaryExpression {
 public:
     explicit TEqExpression(TExpressionPtr&& lhs, TExpressionPtr&& rhs)
         : TBinaryExpression(std::move(lhs), std::move(rhs)) {}
+
     void Accept(IVisitor* visitor) override {
         visitor->Visit(this);
     }
@@ -128,6 +129,16 @@ public:
 
 using TEqExpressionPtr = std::unique_ptr<TEqExpression>;
 
+
+class TNEqExpression : public TBinaryExpression {
+public:
+    explicit TNEqExpression(TExpressionPtr&& lhs, TExpressionPtr&& rhs)
+        : TBinaryExpression(std::move(lhs), std::move(rhs)) {}
+
+    void Accept(IVisitor* visitor) override {
+        visitor->Visit(this);
+    }
+};
 
 class TLeExpression : public TBinaryExpression {
 public:

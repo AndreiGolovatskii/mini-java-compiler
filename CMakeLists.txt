@@ -17,6 +17,8 @@ add_subdirectory(visitors)
 add_subdirectory(symbol_table)
 add_subdirectory(scope_table)
 add_subdirectory(types)
+add_subdirectory(ir_builder)
+add_subdirectory(jit)
 
 
 add_library(
@@ -24,7 +26,7 @@ add_library(
         INTERFACE
 )
 
-target_link_libraries(Compiler INTERFACE Driver Visitors SymbolTable ScopeTable Types)
+target_link_libraries(Compiler INTERFACE Driver Visitors SymbolTable ScopeTable Types IRBuilder JIT)
 
 add_executable(
         CompilerExe

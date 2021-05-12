@@ -7,7 +7,6 @@ Classes:
         name: main
         return-type:
           kind: void type
-          is-array: false
         arguments: ~
         statements:
           - kind: assert statement

@@ -9,6 +9,9 @@ class Proxy {
     public int[] GetMemberToo() {
         return this.Member;
     }
+    public int[] GetMemberTooToo() {
+        return GetMember();
+    }
 }
 
 class Main {
@@ -17,5 +20,6 @@ class Main {
         proxy.Init(100 + 1);
         proxy.GetMember()[5] = -5;
         proxy.GetMemberToo()[4] = -4;
+        proxy.GetMemberTooToo();
     }
 }

@@ -48,9 +48,10 @@
     PERCENT "%"
     GT ">"
     LT "<"
-    GE "=>"
+    GE ">="
     LE "<="
     EQ "=="
+    NEQ "!="
 
     NOT "!"
     AND "&&"
@@ -243,8 +244,7 @@ simple_type:
 
 array_type:
 	simple_type "[]" {
-	    $$ = std::move($1);
-	    $$->MakeArray();
+	    $$ = std::make_unique<TArrayTypeNode>(std::move($1));
 	}
 
 
@@ -260,7 +260,7 @@ type_identifier:
 %right "||";
 %right "&&";
 %precedence "!";
-%left ">" "<" "<=" ">=" "==";
+%left ">" "<" "<=" ">=" "==" "!=";
 %left "+" "-";
 %left "*" "/" "%";
 %left UMINUS;
@@ -293,6 +293,9 @@ method_invocation:
     expr "." IDENTIFIER "(" expr_comma_separated_list ")" {
         $$ = std::make_unique<TMethodInvocation>(std::move($1), std::move($3), std::move($5));
     }
+    | IDENTIFIER "(" expr_comma_separated_list ")" {
+        $$ = std::make_unique<TMethodInvocation>(std::make_unique<TThisExpression>(), std::move($1), std::move($3));
+    }
 
 
 expr_comma_separated_list:
@@ -317,10 +320,7 @@ expr_comma_separated_list_prefix:
 
 field_invocation:
     expr "." IDENTIFIER %prec NO_BRACKET {
-        $$ = std::make_unique<TFieldInvocation>(std::move($3));
-    }
-    | expr "." IDENTIFIER "[" expr "]" {
-        $$ = std::make_unique<TFieldInvocationIndexed>(std::move($3), std::move($5));
+        $$ = std::make_unique<TFieldInvocation>(std::move($1), std::move($3));
     }
 
 
@@ -333,6 +333,7 @@ expr:
     | expr ">=" expr {$$ = std::make_unique<TGeqExpression>(std::move($1), std::move($3));}
     | expr "<=" expr {$$ = std::make_unique<TLeqExpression>(std::move($1), std::move($3));}
     | expr "==" expr {$$ = std::make_unique<TEqExpression>(std::move($1), std::move($3));}
+    | expr "!=" expr {$$ = std::make_unique<TNEqExpression>(std::move($1), std::move($3));}
 
     | expr "+" expr {$$ = std::make_unique<TSumExpression>(std::move($1), std::move($3));}
     | expr "-" expr {$$ = std::make_unique<TSubExpression>(std::move($1), std::move($3));}
@@ -343,8 +344,8 @@ expr:
 
     | expr "[" expr "]"  {$$ = std::make_unique<TIndexExpression>(std::move($1), std::move($3));}
     | expr "."  "length" {$$ = std::make_unique<TLengthExpression>(std::move($1));}
+    | "new" simple_type "(" ")" {$$ = std::make_unique<TNewExpression>(std::move($2));}
     | "new" simple_type "[" expr "]" {$$ = std::make_unique<TNewArrayExpression>(std::move($2), std::move($4));}
-    | "new" type_identifier "(" ")" {$$ = std::make_unique<TNewExpression>(std::move($2));}
     | "!" expr {$$ = std::make_unique<TNotExpression>(std::move($2));}
     | "(" expr ")" {$$ = std::move($2);}
     | IDENTIFIER {$$ = std::make_unique<TIdentifierExpression>(std::move($1));}
