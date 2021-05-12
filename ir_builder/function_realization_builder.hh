@@ -149,7 +149,6 @@ public:
     }
 
 private:
-    
     void CheckoutBB(llvm::BasicBlock* newBB) {
         if (!BasicBlock_->getTerminator()) {
             llvm::BranchInst::Create(newBB, BasicBlock_);

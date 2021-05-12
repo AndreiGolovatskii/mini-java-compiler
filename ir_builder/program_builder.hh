@@ -10,10 +10,10 @@
 
 class TProgramBuilder : public TBaseBuilder {
 public:
-    explicit TProgramBuilder(TBaseBuilder& base): TBaseBuilder(base) {}
+    explicit TProgramBuilder(TBaseBuilder& base) : TBaseBuilder(base) {}
 
-    template<class ...Args>
-    explicit TProgramBuilder(Args&&... args): TBaseBuilder(std::forward<Args>(args)...) {}
+    template<class... Args>
+    explicit TProgramBuilder(Args&&... args) : TBaseBuilder(std::forward<Args>(args)...) {}
 
 private:
     void Visit(struct TProgram* program) override {

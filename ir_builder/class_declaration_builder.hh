@@ -3,7 +3,6 @@
 #include "base_builder.hh"
 
 
-
 class TClassesDeclarationBuilder : public TBaseBuilder {
 public:
     explicit TClassesDeclarationBuilder(TBaseBuilder& base) : TBaseBuilder(base) {}
@@ -18,10 +17,9 @@ public:
         }
     }
     void Visit(struct TClassDeclaration* declaration) override {
-        assert(declaration->Extends() == "object"); // TODO
+        assert(declaration->Extends() == "object");// TODO
         auto StructPtr = llvm::StructType::create(Context, declaration->ClassName());
         StructPtr->setName(declaration->ClassName());
         ClassTable.Add(declaration->ClassName(), StructPtr);
     }
-
 };

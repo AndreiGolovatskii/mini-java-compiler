@@ -358,7 +358,7 @@ public:
 
     void Visit(struct TArrayTypeNode* node) override {
         YAML::Node result;
-        result["kind"]       = "array type";
+        result["kind"] = "array type";
         node->Type()->Accept(this);
         result["inner type"] = Return_;
 
@@ -438,7 +438,7 @@ private:
 
     void ProcessType_(const std::string& prefix, TTypeNode* type) {
         YAML::Node result;
-        result["kind"]     = prefix + " type";
+        result["kind"] = prefix + " type";
 
         SetReturn_(result);
     }

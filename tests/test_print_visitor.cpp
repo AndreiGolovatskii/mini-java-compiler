@@ -39,5 +39,4 @@ TEST_P(PrintVisitorTest, ParseTest) {
 }
 
 
-INSTANTIATE_TEST_SUITE_P(ParseTest, PrintVisitorTest,
-                         ::testing::ValuesIn(FilesToTest({"print_visitor_tests"})));
+INSTANTIATE_TEST_SUITE_P(ParseTest, PrintVisitorTest, ::testing::ValuesIn(FilesToTest({"print_visitor_tests"})));
