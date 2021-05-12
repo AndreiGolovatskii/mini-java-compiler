@@ -1,17 +1,20 @@
 class PrimeCheck {
     public static boolean IsPrime(int x) {
-        if (x <= 1)
+        if (x <= 1) {
             return false;
-
-        int i;
-        i = 2;
-        while (i * i <= x) {
-            if (x % i == 0) {
-                return false;
+        } else {
+            int i;
+            i = 2;
+            while (i * i <= x) {
+                if (x % i == 0) {
+                    return false;
+                }
+                i = i + 1;
             }
-            i = i + 1;
+            return true;
         }
-        return true;
+        assert (false);
+        return false;
     }
 }
 
