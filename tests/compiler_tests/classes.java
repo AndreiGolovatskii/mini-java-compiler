@@ -17,6 +17,9 @@ class Data {
         res.member_y = member_y;
         res.member_data = member_data;
 
+        this.Swap();
+        this.Swap();
+
         return res;
     }
 }
