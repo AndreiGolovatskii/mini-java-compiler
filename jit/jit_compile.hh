@@ -10,7 +10,7 @@
 #include "program_builder.hh"
 
 
-std::pair<std::unique_ptr<llvm::Module>, std::unique_ptr<llvm::LLVMContext>>
+inline std::pair<std::unique_ptr<llvm::Module>, std::unique_ptr<llvm::LLVMContext>>
 JitCompile(const std::filesystem::path& path) {
     TDriver driver;
 
@@ -27,9 +27,7 @@ JitCompile(const std::filesystem::path& path) {
     return {std::move(module), std::move(context)};
 }
 
-Status JitCompileAndRunInSubprocess(const std::filesystem::path& path, int timeout = 1) {
-    auto [module, context] = JitCompile(path);
-
+llvm::Function* GetEntry(llvm::Module* module) {
     std::optional<llvm::Function*> entry;
     for (auto& func : module->getFunctionList()) {
         if (func.hasName() && func.getName().endswith("#main")) {
@@ -43,5 +41,17 @@ Status JitCompileAndRunInSubprocess(const std::filesystem::path& path, int timeo
     if (!entry.has_value()) {
         throw std::logic_error{"No main function to entry"};
     }
-    return JitRunSubprocess(std::move(module), entry.value(), timeout);
+    return entry.value();
+}
+
+inline void JitCompileAndRun(const std::filesystem::path& path) {
+    auto [module, context] = JitCompile(path);
+    auto entry             = GetEntry(module.get());
+    JitRun(std::move(module), entry);
+}
+
+inline Status JitCompileAndRunInSubprocess(const std::filesystem::path& path, int timeout = 1) {
+    auto [module, context] = JitCompile(path);
+    auto entry             = GetEntry(module.get());
+    return JitRunSubprocess(std::move(module), entry, timeout);
 }
